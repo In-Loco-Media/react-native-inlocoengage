@@ -2,13 +2,15 @@ package com.inlocomedia.reactnative.engage;
 
 import android.Manifest;
 import android.location.Address;
-import android.util.Log;
 
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.inlocomedia.android.engagement.InLocoEngagement;
+import com.inlocomedia.android.engagement.InLocoEngagementCheckIn;
 import com.inlocomedia.android.engagement.InLocoEngagementOptions;
 import com.inlocomedia.android.engagement.PushMessage;
 import com.inlocomedia.android.engagement.request.PushProvider;
@@ -36,6 +38,12 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
     private static String ADDRESS_LONGITUDE_KEY = "longitude";
     private static String ADDRESS_LINE = "address_line";
 
+    private static String OPTIONS_APP_ID = "appId";
+    private static String OPTIONS_LOGS_ENABLED = "logsEnabled";
+    private static String OPTIONS_DEVELOPMENT_DEVICES = "developmentDevices";
+    private static String OPTIONS_LOCATION_ENABLED = "locationEnabled";
+    private static String OPTIONS_REQUIRES_USER_PRIVACY_CONSENT = "userPrivacyConsentRequired";
+
     private final ReactApplicationContext reactContext;
 
     public RNInLocoEngageModule(ReactApplicationContext reactContext) {
@@ -44,12 +52,19 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void init(final String appId, final boolean logsEnabled) {
-
+    public void init(final ReadableMap optionsMap) {
         InLocoEngagementOptions options = InLocoEngagementOptions.getInstance(reactContext);
+        options.setApplicationId(optionsMap.getString(OPTIONS_APP_ID));
+        options.setLogEnabled(optionsMap.getBoolean(OPTIONS_LOGS_ENABLED));
+        options.setLocationTrackingEnabled(optionsMap.getBoolean(OPTIONS_LOCATION_ENABLED));
+        options.setRequiresUserPrivacyConsent(optionsMap.getBoolean(OPTIONS_REQUIRES_USER_PRIVACY_CONSENT));
 
-        options.setApplicationId(appId);
-        options.setLogEnabled(logsEnabled);
+        ReadableArray developmentDevicesReadableArr = optionsMap.getArray(OPTIONS_DEVELOPMENT_DEVICES);
+        if (developmentDevicesReadableArr != null) {
+            String[] developmentDevicesArr = new String[developmentDevicesReadableArr.size()];
+            developmentDevicesArr = developmentDevicesReadableArr.toArrayList().toArray(developmentDevicesArr);
+            options.setDevelopmentDevices(developmentDevicesArr);
+        }
 
         InLocoEngagement.init(reactContext, options);
     }
@@ -63,6 +78,16 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void clearUser() {
         InLocoEngagement.clearUser(reactContext);
+    }
+
+    @ReactMethod
+    public void giveUserPrivacyConsent(final boolean consentGiven) {
+        InLocoEngagement.givePrivacyConsent(reactContext, consentGiven);
+    }
+
+    @ReactMethod
+    public void isWaitingUserPrivacyConsent(Promise promise) {
+        promise.resolve(InLocoEngagement.isWaitingUserPrivacyConsent(reactContext));
     }
 
     @ReactMethod
@@ -113,6 +138,25 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
     public void trackEvent(final String eventName, ReadableMap properties) {
         Map<String, String> propertiesMap = convertToStringStringMap(properties.toHashMap());
         InLocoEngagement.trackEvent(reactContext, eventName, propertiesMap);
+    }
+
+    @ReactMethod
+    public void trackLocalizedEvent(final String eventName, ReadableMap properties) {
+        Map<String, String> propertiesMap = convertToStringStringMap(properties.toHashMap());
+        InLocoEngagement.trackLocalizedEvent(reactContext, eventName, propertiesMap);
+    }
+
+    @ReactMethod
+    public void registerCheckIn(final String placeName, final String placeId, ReadableMap properties) {
+        Map<String, String> propertiesMap = convertToStringStringMap(properties.toHashMap());
+
+        InLocoEngagementCheckIn checkIn = new InLocoEngagementCheckIn.Builder()
+                .placeName(placeName)
+                .placeId(placeId)
+                .extras(propertiesMap)
+                .build();
+
+        InLocoEngagement.registerCheckIn(reactContext, checkIn);
     }
 
     @ReactMethod

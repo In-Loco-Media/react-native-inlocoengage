@@ -1,3 +1,13 @@
+Release 4.0.0
+===
+- Exposes privacy related methods
+- Exposes check-in and localized events methods
+- Updates In Loco SDK version to 4.7.0 on Android
+- Updates example to use React Native version 0.61.3
+- Updates example to use react-native-firebase version 5.5.6
+- Makes library compatible with autolinking
+- Adds more initialization options
+
 Release 3.2.0
 ===
 - Expose functions to set and clear the user address

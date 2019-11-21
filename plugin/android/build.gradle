@@ -1,3 +1,6 @@
+def safeExtGet(prop, fallback) {
+    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+}
 
 buildscript {
     repositories {
@@ -11,19 +14,15 @@ buildscript {
 
 apply plugin: 'com.android.library'
 
-def DEFAULT_COMPILE_SDK_VERSION = 26
-def DEFAULT_BUILD_TOOLS_VERSION = "27.0.3"
-def DEFAULT_TARGET_SDK_VERSION = 26
-def DEFAULT_GOOGLE_PLAY_SERVICES_VERSION = "12.0.1"
-def DEFAULT_SUPPORT_LIB_VERSION = "26.1.0"
-
 android {
-    compileSdkVersion rootProject.hasProperty('compileSdkVersion') ? rootProject.compileSdkVersion : DEFAULT_COMPILE_SDK_VERSION
-    buildToolsVersion rootProject.hasProperty('buildToolsVersion') ? rootProject.buildToolsVersion : DEFAULT_BUILD_TOOLS_VERSION
+    compileSdkVersion safeExtGet('compileSdkVersion', 28)
+    buildToolsVersion safeExtGet('buildToolsVersion', '26.0.3')
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion rootProject.hasProperty('targetSdkVersion') ? rootProject.targetSdkVersion : DEFAULT_TARGET_SDK_VERSION
+        minSdkVersion safeExtGet('minSdkVersion', 14)
+        targetSdkVersion safeExtGet('targetSdkVersion', 28)
+        versionCode 1
+        versionName "1.0"
         versionCode 1
         versionName "1.0"
     }
@@ -36,16 +35,18 @@ repositories {
     mavenCentral()
 }
 
-def googlePlayServicesVersion = rootProject.hasProperty('googlePlayServicesVersion') ? rootProject.googlePlayServicesVersion : DEFAULT_GOOGLE_PLAY_SERVICES_VERSION
-def supportVersion = rootProject.hasProperty('supportLibVersion') ? rootProject.supportLibVersion : DEFAULT_SUPPORT_LIB_VERSION
-
 dependencies {
-    compile "com.facebook.react:react-native:+"
-    compile "com.android.support:support-v4:$supportVersion"
-    compile "com.inlocomedia.android:android-sdk-engagement:4.5.3"
-    compile "com.inlocomedia.android:android-sdk-location:4.5.3"
-    compile "com.google.android.gms:play-services-ads:$googlePlayServicesVersion"
-    compile "com.google.android.gms:play-services-location:$googlePlayServicesVersion"
+    def supportLibVersion = safeExtGet('supportLibVersion', '28.0.0')
+    def supportLibMajorVersion = supportLibVersion.split('\\.')[0] as int
+    def appCompatLibName =  (supportLibMajorVersion < 20) ? "androidx.legacy:legacy-support-v4" : "com.android.support:support-v4"
+    implementation "$appCompatLibName:$supportLibVersion"
+    implementation('com.facebook.react:react-native:+') {
+        exclude group: 'com.android.support'
+    }
+    implementation "com.inlocomedia.android:android-sdk-engagement:4.7.0"
+    implementation "com.inlocomedia.android:android-sdk-location:4.7.0"
+    implementation "com.google.android.gms:play-services-ads-identifier:${safeExtGet('playServicesVersion', '17.0.0')}"
+    implementation "com.google.android.gms:play-services-location:${safeExtGet('playServicesVersion', '17.0.0')}"
 }
 
   

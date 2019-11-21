@@ -8,7 +8,11 @@
 node_modules/
 npm-debug.log
 yarn-error.log
-  
+
+# Firebase config	
+#	
+GoogleService-Info.plist
+google-services.json
 
 # Xcode
 #

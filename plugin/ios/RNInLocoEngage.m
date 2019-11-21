@@ -1,6 +1,12 @@
 
 #import "RNInLocoEngage.h"
 
+#define OPTIONS_APP_ID @"appId"
+#define OPTIONS_LOGS_ENABLED @"logsEnabled"
+#define OPTIONS_DEVELOPMENT_DEVICES @"developmentDevices"
+#define OPTIONS_LOCATION_ENABLED @"locationEnabled"
+#define OPTIONS_REQUIRES_USER_PRIVACY_CONSENT @"userPrivacyConsentRequired"
+
 #define ADDRESS_LOCALE_KEY @"locale"
 #define ADDRESS_COUNTRY_NAME_KEY @"countryName"
 #define ADDRESS_COUNTRY_CODE_KEY @"countryCode"
@@ -13,7 +19,7 @@
 #define ADDRESS_POSTAL_CODE_KEY @"postalCode"
 #define ADDRESS_LATITUDE_KEY @"latitude"
 #define ADDRESS_LONGITUDE_KEY @"longitude"
-#define ADDRESS_LINE_KEY @"address_line"
+#define ADDRESS_LINE_KEY @"addressLine"
 
 @import InLocoMediaSDKEngage;
 
@@ -21,11 +27,14 @@
 
 RCT_EXPORT_MODULE();
 
-RCT_EXPORT_METHOD(init:(NSString *)appId withLogsEnabled:(BOOL)logsEnabled)
+RCT_EXPORT_METHOD(init:(NSDictionary *) optionsDict)
 {
     ILMEngageOptions *options = [[ILMEngageOptions alloc] init];
-    [options setLogEnabled:logsEnabled];
-    [options setApplicationId:appId];
+    [options setApplicationId:[optionsDict objectForKey:OPTIONS_APP_ID]];
+    [options setLogEnabled:[[optionsDict objectForKey:OPTIONS_LOGS_ENABLED] boolValue]];
+    [options setDevelopmentDevices:[optionsDict objectForKey:OPTIONS_DEVELOPMENT_DEVICES]];
+    [options setLocationEnabled:[[optionsDict objectForKey:OPTIONS_LOCATION_ENABLED] boolValue]];
+    [options setRequiresUserPrivacyConsent:[[optionsDict objectForKey:OPTIONS_REQUIRES_USER_PRIVACY_CONSENT] boolValue]];
     [ILMInLocoEngage initWithOptions:options];
 }
 
@@ -38,6 +47,16 @@ RCT_EXPORT_METHOD(setUser:(NSString *)userId)
 RCT_EXPORT_METHOD(clearUser)
 {
     [ILMInLocoEngage clearUser];
+}
+
+RCT_EXPORT_METHOD(giveUserPrivacyConsent:(BOOL) consentGiven)
+{
+    [ILMInLocoEngage giveUserPrivacyConsent:consentGiven];
+}
+
+RCT_EXPORT_METHOD(isWaitingUserPrivacyConsent:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    resolve([NSNumber numberWithBool:[ILMInLocoEngage isWaitingUserPrivacyConsent]]);
 }
 
 RCT_EXPORT_METHOD(setUserAddress:(NSDictionary *)addressDict)
