@@ -18,6 +18,7 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* InLocoForAppsSampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* InLocoForAppsSampleTests.m */; };
+		6230093F243CED380013171D /* InLocoOptions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6230093E243CED380013171D /* InLocoOptions.plist */; };
 		79B31590237A00FC00171C30 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 79B3158F237A00FC00171C30 /* GoogleService-Info.plist */; };
 		A21C15B5ABC5035DDD5FD96E /* libPods-InLocoForAppsSample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EF2BEEDA82CEA07316290886 /* libPods-InLocoForAppsSample.a */; };
 		B6E658C977410B7E41509485 /* libPods-InLocoForAppsSample-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F0CC68325661050E50F1E4B /* libPods-InLocoForAppsSample-tvOSTests.a */; };
@@ -57,6 +58,7 @@
 		2D02E4901E0B4A5D006451C7 /* InLocoForAppsSample-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "InLocoForAppsSample-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A4CC8FA113CE5A6EEB7EC0C /* Pods-InLocoForAppsSample-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InLocoForAppsSample-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-InLocoForAppsSample-tvOSTests/Pods-InLocoForAppsSample-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5A57AC051D36C40526245159 /* Pods-InLocoForAppsSample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InLocoForAppsSample.release.xcconfig"; path = "Target Support Files/Pods-InLocoForAppsSample/Pods-InLocoForAppsSample.release.xcconfig"; sourceTree = "<group>"; };
+		6230093E243CED380013171D /* InLocoOptions.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = InLocoOptions.plist; sourceTree = "<group>"; };
 		6CFEB738A113FAFC19C62BCD /* Pods-InLocoForAppsSample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InLocoForAppsSample.debug.xcconfig"; path = "Target Support Files/Pods-InLocoForAppsSample/Pods-InLocoForAppsSample.debug.xcconfig"; sourceTree = "<group>"; };
 		79A83281237B4B9400AAED1F /* InLocoForAppsSample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = InLocoForAppsSample.entitlements; path = InLocoForAppsSample/InLocoForAppsSample.entitlements; sourceTree = "<group>"; };
 		79B3158F237A00FC00171C30 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 		13B07FAE1A68108700A75B9A /* InLocoForAppsSample */ = {
 			isa = PBXGroup;
 			children = (
+				6230093E243CED380013171D /* InLocoOptions.plist */,
 				79A83281237B4B9400AAED1F /* InLocoForAppsSample.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -355,6 +358,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				6230093F243CED380013171D /* InLocoOptions.plist in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				79B31590237A00FC00171C30 /* GoogleService-Info.plist in Resources */,
 			);

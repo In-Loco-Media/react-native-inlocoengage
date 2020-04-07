@@ -60,35 +60,20 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void init() {
+    public void initSdk() {
         InLoco.init(reactContext);
     }
 
     @ReactMethod
-    public void init(final ReadableMap optionsMap) {
+    public void initSdkWithOptions(final ReadableMap optionsMap) {
         InLocoOptions.Builder options = new InLocoOptions.Builder();
-
-        if (optionsMap.hasKey(OPTIONS_APP_ID)) {
-            options.appId(optionsMap.getString(OPTIONS_APP_ID));
-        }
-        if (optionsMap.hasKey(OPTIONS_LOGS_ENABLED)) {
-            options.logEnabled(optionsMap.getBoolean(OPTIONS_LOGS_ENABLED));
-        }
-        if (optionsMap.hasKey(OPTIONS_VISITS_ENABLED)) {
-            options.visitsEnabledByDefault(optionsMap.getBoolean(OPTIONS_VISITS_ENABLED));
-        }
-        if (optionsMap.hasKey(OPTIONS_REQUIRES_USER_PRIVACY_CONSENT)) {
-            options.privacyConsentRequired(optionsMap.getBoolean(OPTIONS_REQUIRES_USER_PRIVACY_CONSENT));
-        }
-        if (optionsMap.hasKey(OPTIONS_BACKGROUND_WAKEUP_ENABLED)) {
-            options.backgroundWakeupEnabled(optionsMap.getBoolean(OPTIONS_BACKGROUND_WAKEUP_ENABLED));
-        }
-        if (optionsMap.hasKey(OPTIONS_SCREEN_TRACKING_ENABLED)) {
-            options.screenTrackingEnabled(optionsMap.getBoolean(OPTIONS_SCREEN_TRACKING_ENABLED));
-        }
-        if (optionsMap.hasKey(OPTIONS_DEVELOPMENT_DEVICES)) {
-            options.developmentDevices(convertReadableArrayToSet(optionsMap.getArray(OPTIONS_DEVELOPMENT_DEVICES)));
-        }
+        options.appId(optionsMap.getString(OPTIONS_APP_ID));
+        options.logEnabled(optionsMap.getBoolean(OPTIONS_LOGS_ENABLED));
+        options.visitsEnabledByDefault(optionsMap.getBoolean(OPTIONS_VISITS_ENABLED));
+        options.privacyConsentRequired(optionsMap.getBoolean(OPTIONS_REQUIRES_USER_PRIVACY_CONSENT));
+        options.backgroundWakeupEnabled(optionsMap.getBoolean(OPTIONS_BACKGROUND_WAKEUP_ENABLED));
+        options.screenTrackingEnabled(optionsMap.getBoolean(OPTIONS_SCREEN_TRACKING_ENABLED));
+        options.developmentDevices(convertReadableArrayToSet(optionsMap.getArray(OPTIONS_DEVELOPMENT_DEVICES)));
 
         InLoco.init(reactContext, options.build());
     }
@@ -109,7 +94,7 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void givePrivacyConsent(ReadableArray consentTypesArray) {
+    public void giveUserPrivacyConsentForTypes(ReadableArray consentTypesArray) {
         Set<String> consentTypes = convertReadableArrayToSet(consentTypesArray);
         InLoco.givePrivacyConsent(reactContext, consentTypes);
     }
@@ -136,7 +121,7 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void setPushEnabled(final boolean enabled) {
+    public void setPushNotificationsEnabled(final boolean enabled) {
         InLocoPush.setEnabled(reactContext, enabled);
     }
 
