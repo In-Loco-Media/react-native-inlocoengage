@@ -154,18 +154,18 @@ export default class App extends Component<Props> {
 
   setUserAddress() {
     InLocoEngage.setUserAddress({
-      "locale": "pt-BR",
-      "countryName": "Brasil",
-      "countryCode": "BR",
-      "adminArea": "Pernambuco",
-      "subAdminArea": "Recife",
-      "locality": "Recife",
-      "subLocality": "Pina",
-      "thoroughfare": "Av. Engenheiro Antônio de Goes",
-      "subThoroughfare": 300,
-      "postalCode": "51110-100",
-      "latitude": -8.088109,
-      "longitude": -34.883838
+      locale: "pt-BR",
+      countryName: "Brasil",
+      countryCode: "BR",
+      adminArea: "Pernambuco",
+      subAdminArea: "Recife",
+      locality: "Recife",
+      subLocality: "Pina",
+      thoroughfare: "Av. Engenheiro Antônio de Goes",
+      subThoroughfare: 300,
+      postalCode: "51110-100",
+      latitude: -8.088109,
+      longitude: -34.883838
     });
   }
 
@@ -174,14 +174,12 @@ export default class App extends Component<Props> {
   }
 
   requestPrivacyConsent() {
-    InLocoEngage.requestPrivacyConsent(
-      {
-        "consentDialogTitle" : "title text", 
-        "consentDialogMessage": "message text", 
-        "consentDialogAcceptText": "accept text", 
-        "consentDialogDenyText": "deny text" 
-      }, 
-      [
+    InLocoEngage.requestPrivacyConsent({
+        consentDialogTitle : "title text", 
+        consentDialogMessage: "message text", 
+        consentDialogAcceptText: "accept text", 
+        consentDialogDenyText: "deny text" 
+      },[
         InLocoEngage.CONSENT_TYPES.ADDRESS_VALIDATION,
         InLocoEngage.CONSENT_TYPES.CONTEXT_PROVIDER,
         InLocoEngage.CONSENT_TYPES.ENGAGE, 
@@ -229,10 +227,6 @@ export default class App extends Component<Props> {
     ]);
   }
 
-  giveUserPrivacyConsent() {
-    InLocoEngage.giveUserPrivacyConsent(true);
-  }
-
   denyConsentTypes() {
     InLocoEngage.denyConsentTypes([
       InLocoEngage.CONSENT_TYPES.ADDRESS_VALIDATION,
@@ -241,26 +235,6 @@ export default class App extends Component<Props> {
       InLocoEngage.CONSENT_TYPES.EVENTS,
       InLocoEngage.CONSENT_TYPES.LOCATION,
     ]);
-  }
-
-  giveUserPrivacyConsentForTypes() {
-    InLocoEngage.giveUserPrivacyConsentForTypes([
-      InLocoEngage.CONSENT_TYPES.ADDRESS_VALIDATION,
-      InLocoEngage.CONSENT_TYPES.CONTEXT_PROVIDER,
-      InLocoEngage.CONSENT_TYPES.ENGAGE, 
-      InLocoEngage.CONSENT_TYPES.EVENTS,
-      InLocoEngage.CONSENT_TYPES.LOCATION,
-    ]);
-  }
-
-  revokeUserPrivacyConsent() {
-    InLocoEngage.giveUserPrivacyConsent(false);
-  }
-
-  checkPrivacyConsentMissing() {
-    InLocoEngage.checkPrivacyConsentMissing().then((isConsentMissing) => {
-      alert(isConsentMissing);
-    });
   }
 
   render() {
@@ -298,25 +272,13 @@ export default class App extends Component<Props> {
             <Button color="#80BA40" title="Request Privacy Consent Dialog" onPress={() => this.requestPrivacyConsent()}></Button>
           </View>
           <View style={styles.buttonContainer}>
-            <Button color="#80BA40" title="Give privacy consent" onPress={() => this.giveUserPrivacyConsent()}></Button>
-          </View>
-          <View style={styles.buttonContainer}>
-            <Button color="#80BA40" title="Give privacy consent for types" onPress={() => this.giveUserPrivacyConsentForTypes()}></Button>
+            <Button color="#80BA40" title="Check Consent" onPress={() => this.checkConsent()}></Button>
           </View>
           <View style={styles.buttonContainer}>
             <Button color="#80BA40" title="Allow Consent Types" onPress={() => this.allowConsentTypes()}></Button>
           </View>
           <View style={styles.buttonContainer}>
             <Button color="#80BA40" title="Set Allowed Consent Types" onPress={() => this.setAllowedConsentTypes()}></Button>
-          </View>
-          <View style={styles.buttonContainer}>
-            <Button color="#80BA40" title="Revoke privacy consent" onPress={() => this.revokeUserPrivacyConsent()}></Button>
-          </View>
-          <View style={styles.buttonContainer}>
-            <Button color="#80BA40" title="Is privacy consent missing?" onPress={() => this.checkPrivacyConsentMissing()}></Button>
-          </View>
-          <View style={styles.buttonContainer}>
-            <Button color="#80BA40" title="Check Consent" onPress={() => this.checkConsent()}></Button>
           </View>
           <View style={styles.buttonContainer}>
             <Button color="#80BA40" title="Deny Consent Types" onPress={() => this.denyConsentTypes()}></Button>
