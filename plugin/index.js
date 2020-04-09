@@ -95,7 +95,7 @@ const isInLocoEngageMessage = (message) => {
 const presentNotification = (message, notificationId, channelId) => {
 	if (Platform.OS == 'android') {
 		notificationId = notificationId || 1111111;
-		RNInLocoEngage.presentNotification(message.data['in_loco_data'], channelId, notificationId);
+		RNInLocoEngage.presentNotification(message.data, channelId, notificationId);
 	}
 }
 
@@ -133,6 +133,12 @@ const clearUserAddress = () => {
 	RNInLocoEngage.clearUserAddress();
 }
 
+const requestPrivacyConsent = (consentDialogOptions, consentTypes) => {
+	if (Platform.OS == 'android') {
+		RNInLocoEngage.requestPrivacyConsent(consentDialogOptions, consentTypes);
+	}
+}
+
 const giveUserPrivacyConsent = (consentGiven) => {
 	RNInLocoEngage.giveUserPrivacyConsent(consentGiven);
 }
@@ -141,8 +147,30 @@ const giveUserPrivacyConsentForTypes = (consentTypes) => {
 	RNInLocoEngage.giveUserPrivacyConsentForTypes(consentTypes);
 }
 
+const allowConsentTypes = (consentTypes) => {
+	if (Platform.OS == 'android') {
+		RNInLocoEngage.allowConsentTypes(consentTypes);
+	}
+}
+
+const setAllowedConsentTypes = (consentTypes) => {
+	if (Platform.OS == 'android') {
+		RNInLocoEngage.setAllowedConsentTypes(consentTypes);
+	}
+}
+
 const checkPrivacyConsentMissing = () => {
 	return RNInLocoEngage.checkPrivacyConsentMissing();
+}
+
+const checkConsent = (consentTypes) => {
+	return RNInLocoEngage.checkConsent(consentTypes);
+}
+
+const denyConsentTypes = (consentTypes) => {
+	if (Platform.OS == 'android') {
+		RNInLocoEngage.denyConsentTypes(consentTypes);
+	}
 }
 
 export default {
@@ -151,6 +179,8 @@ export default {
 	setUser,
 	clearUser,
 	trackEvent,
+	trackLocalizedEvent,
+	registerCheckIn, 
 	setPushProvider,
 	setFirebasePushProvider,
 	setPushNotificationsEnabled,
@@ -161,10 +191,13 @@ export default {
 	getUrl,
 	setUserAddress,
 	clearUserAddress,
+	requestPrivacyConsent,
 	giveUserPrivacyConsent,
 	giveUserPrivacyConsentForTypes,
+	allowConsentTypes,
+	setAllowedConsentTypes,
 	checkPrivacyConsentMissing,
-	trackLocalizedEvent,
-	registerCheckIn, 
+	checkConsent,
+	denyConsentTypes,
 	CONSENT_TYPES
 };

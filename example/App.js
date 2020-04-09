@@ -173,8 +173,74 @@ export default class App extends Component<Props> {
     InLocoEngage.clearUserAddress();
   }
 
+  requestPrivacyConsent() {
+    InLocoEngage.requestPrivacyConsent(
+      {
+        "consentDialogTitle" : "title text", 
+        "consentDialogMessage": "message text", 
+        "consentDialogAcceptText": "accept text", 
+        "consentDialogDenyText": "deny text" 
+      }, 
+      [
+        InLocoEngage.CONSENT_TYPES.ADDRESS_VALIDATION,
+        InLocoEngage.CONSENT_TYPES.CONTEXT_PROVIDER,
+        InLocoEngage.CONSENT_TYPES.ENGAGE, 
+        InLocoEngage.CONSENT_TYPES.EVENTS,
+        InLocoEngage.CONSENT_TYPES.LOCATION,
+      ]);
+      // It's possible to add a promise to retreive the consent result:
+      /* .then((data) => {
+        console.log("InLocoEngage - isWaitingConsent: " + data.isWaitingConsent);
+        console.log(("InLocoEngage - areAllConsentTypesGiven: " + data.areAllConsentTypesGiven);
+      }); */
+  }
+  
+  checkConsent() {
+    InLocoEngage.checkConsent([
+      InLocoEngage.CONSENT_TYPES.ADDRESS_VALIDATION,
+      InLocoEngage.CONSENT_TYPES.CONTEXT_PROVIDER,
+      InLocoEngage.CONSENT_TYPES.ENGAGE, 
+      InLocoEngage.CONSENT_TYPES.EVENTS,
+      InLocoEngage.CONSENT_TYPES.LOCATION,
+    ]).then((data) => {
+      var isWaitingConsent = "isWaitingConsent: " + data.isWaitingConsent + "\n";
+      var areAllConsentTypesGiven = "areAllConsentTypesGiven: " + data.areAllConsentTypesGiven;
+      alert(isWaitingConsent + areAllConsentTypesGiven);
+    });
+  }
+
+  allowConsentTypes() {
+    InLocoEngage.allowConsentTypes([
+      InLocoEngage.CONSENT_TYPES.ADDRESS_VALIDATION,
+      InLocoEngage.CONSENT_TYPES.CONTEXT_PROVIDER,
+      InLocoEngage.CONSENT_TYPES.ENGAGE, 
+      InLocoEngage.CONSENT_TYPES.EVENTS,
+      InLocoEngage.CONSENT_TYPES.LOCATION,
+    ]);
+  }
+
+  setAllowedConsentTypes() {
+    InLocoEngage.setAllowedConsentTypes([
+      InLocoEngage.CONSENT_TYPES.ADDRESS_VALIDATION,
+      InLocoEngage.CONSENT_TYPES.CONTEXT_PROVIDER,
+      InLocoEngage.CONSENT_TYPES.ENGAGE, 
+      InLocoEngage.CONSENT_TYPES.EVENTS,
+      InLocoEngage.CONSENT_TYPES.LOCATION,
+    ]);
+  }
+
   giveUserPrivacyConsent() {
     InLocoEngage.giveUserPrivacyConsent(true);
+  }
+
+  denyConsentTypes() {
+    InLocoEngage.denyConsentTypes([
+      InLocoEngage.CONSENT_TYPES.ADDRESS_VALIDATION,
+      InLocoEngage.CONSENT_TYPES.CONTEXT_PROVIDER,
+      InLocoEngage.CONSENT_TYPES.ENGAGE, 
+      InLocoEngage.CONSENT_TYPES.EVENTS,
+      InLocoEngage.CONSENT_TYPES.LOCATION,
+    ]);
   }
 
   giveUserPrivacyConsentForTypes() {
@@ -229,16 +295,31 @@ export default class App extends Component<Props> {
             <Button color="#80BA40" title="Clear user address" onPress={() => this.clearUserAddress()}></Button>
           </View>
           <View style={styles.buttonContainer}>
+            <Button color="#80BA40" title="Request Privacy Consent Dialog" onPress={() => this.requestPrivacyConsent()}></Button>
+          </View>
+          <View style={styles.buttonContainer}>
             <Button color="#80BA40" title="Give privacy consent" onPress={() => this.giveUserPrivacyConsent()}></Button>
           </View>
           <View style={styles.buttonContainer}>
             <Button color="#80BA40" title="Give privacy consent for types" onPress={() => this.giveUserPrivacyConsentForTypes()}></Button>
           </View>
           <View style={styles.buttonContainer}>
+            <Button color="#80BA40" title="Allow Consent Types" onPress={() => this.allowConsentTypes()}></Button>
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button color="#80BA40" title="Set Allowed Consent Types" onPress={() => this.setAllowedConsentTypes()}></Button>
+          </View>
+          <View style={styles.buttonContainer}>
             <Button color="#80BA40" title="Revoke privacy consent" onPress={() => this.revokeUserPrivacyConsent()}></Button>
           </View>
           <View style={styles.buttonContainer}>
             <Button color="#80BA40" title="Is privacy consent missing?" onPress={() => this.checkPrivacyConsentMissing()}></Button>
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button color="#80BA40" title="Check Consent" onPress={() => this.checkConsent()}></Button>
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button color="#80BA40" title="Deny Consent Types" onPress={() => this.denyConsentTypes()}></Button>
           </View>
         </ScrollView>
       </SafeAreaView>

@@ -2,15 +2,20 @@ package com.inlocomedia.reactnative.engage;
 
 import android.location.Address;
 
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableMap;
+import com.inlocomedia.android.common.ConsentDialogOptions;
+import com.inlocomedia.android.common.ConsentResult;
 import com.inlocomedia.android.common.InLoco;
 import com.inlocomedia.android.common.InLocoEvents;
 import com.inlocomedia.android.common.InLocoOptions;
+import com.inlocomedia.android.common.listener.ConsentListener;
 import com.inlocomedia.android.common.listener.InLocoListener;
 import com.inlocomedia.android.common.listener.Result;
 import com.inlocomedia.android.engagement.InLocoAddressValidation;
@@ -52,6 +57,11 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
     private static String OPTIONS_BACKGROUND_WAKEUP_ENABLED = "backgroundWakeupEnabled";
     private static String OPTIONS_SCREEN_TRACKING_ENABLED = "screenTrackingEnabled";
 
+    private static String CONSENT_DIALOG_TITLE = "consentDialogTitle";
+    private static String CONSENT_DIALOG_MESSAGE = "consentDialogMessage";
+    private static String CONSENT_DIALOG_ACCEPT_TEXT = "consentDialogAcceptText";
+    private static String CONSENT_DIALOG_DENY_TEXT= "consentDialogDenyText";
+
     private final ReactApplicationContext reactContext;
 
     public RNInLocoEngageModule(ReactApplicationContext reactContext) {
@@ -89,17 +99,72 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void requestPrivacyConsent(final ReadableMap consentDialogOptionsMap, final ReadableArray consentTypesArray, final Promise promise) {
+        ConsentDialogOptions.Builder consentDialogOptions = new ConsentDialogOptions.Builder(reactContext.getCurrentActivity());
+        if (consentDialogOptionsMap.hasKey(CONSENT_DIALOG_TITLE)) {
+            consentDialogOptions.title(consentDialogOptionsMap.getString(CONSENT_DIALOG_TITLE));
+        }
+        if (consentDialogOptionsMap.hasKey(CONSENT_DIALOG_MESSAGE)) {
+            consentDialogOptions.message(consentDialogOptionsMap.getString(CONSENT_DIALOG_MESSAGE));
+        }
+        if (consentDialogOptionsMap.hasKey(CONSENT_DIALOG_ACCEPT_TEXT)) {
+            consentDialogOptions.acceptText(consentDialogOptionsMap.getString(CONSENT_DIALOG_ACCEPT_TEXT));
+        }
+        if (consentDialogOptionsMap.hasKey(CONSENT_DIALOG_DENY_TEXT)) {
+            consentDialogOptions.denyText(consentDialogOptionsMap.getString(CONSENT_DIALOG_DENY_TEXT));
+        }
+        consentDialogOptions.consentTypes(convertReadableArrayToSet(consentTypesArray));
+
+        if (promise != null) {
+            InLoco.requestPrivacyConsent(consentDialogOptions.build(), new ConsentListener() {
+                @Override
+                public void onConsentResult(final ConsentResult consentResult) {
+                    boolean isWaitingConsent = consentResult.isWaitingConsent();
+                    boolean areAllConsentTypesGiven = consentResult.areAllConsentTypesGiven();
+                    WritableMap result = Arguments.createMap();
+                    result.putBoolean("isWaitingConsent", isWaitingConsent);
+                    result.putBoolean("areAllConsentTypesGiven", areAllConsentTypesGiven);
+                    promise.resolve(result);
+                }
+            });
+        } else {
+            InLoco.requestPrivacyConsent(consentDialogOptions.build(), null);
+        }
+    }
+
+    @ReactMethod
+    @Deprecated
     public void giveUserPrivacyConsent(final boolean consentGiven) {
         InLoco.givePrivacyConsent(reactContext, consentGiven);
     }
 
     @ReactMethod
-    public void giveUserPrivacyConsentForTypes(ReadableArray consentTypesArray) {
+    @Deprecated
+    public void giveUserPrivacyConsentForTypes(final ReadableArray consentTypesArray) {
         Set<String> consentTypes = convertReadableArrayToSet(consentTypesArray);
         InLoco.givePrivacyConsent(reactContext, consentTypes);
     }
 
     @ReactMethod
+    public void setAllowedConsentTypes(final ReadableArray consentTypesArray) {
+        Set<String> consentTypes = convertReadableArrayToSet(consentTypesArray);
+        InLoco.setAllowedConsentTypes(reactContext, consentTypes);
+    }
+
+    @ReactMethod
+    public void allowConsentTypes(final ReadableArray consentTypesArray) {
+        Set<String> consentTypes = convertReadableArrayToSet(consentTypesArray);
+        InLoco.allowConsentTypes(reactContext, consentTypes);
+    }
+
+    @ReactMethod
+    public void denyConsentTypes(final ReadableArray consentTypesArray) {
+        Set<String> consentTypes = convertReadableArrayToSet(consentTypesArray);
+        InLoco.denyConsentTypes(reactContext, consentTypes);
+    }
+
+    @ReactMethod
+    @Deprecated
     public void checkPrivacyConsentMissing(final Promise promise) {
         InLoco.checkPrivacyConsentMissing(reactContext, new InLocoListener<Boolean>() {
             @Override
@@ -108,6 +173,22 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
                 promise.resolve(privacyConsentMissing);
             }
         });
+    }
+
+    @ReactMethod
+    public void checkConsent(final ReadableArray consentTypesArray, final Promise promise) {
+        Set<String> consentTypes = convertReadableArrayToSet(consentTypesArray);
+        InLoco.checkConsent(reactContext, new ConsentListener() {
+            @Override
+            public void onConsentResult(final ConsentResult consentResult) {
+                boolean isWaitingConsent = consentResult.isWaitingConsent();
+                boolean areAllConsentTypesGiven = consentResult.areAllConsentTypesGiven();
+                WritableMap result = Arguments.createMap();
+                result.putBoolean("isWaitingConsent", isWaitingConsent);
+                result.putBoolean("areAllConsentTypesGiven", areAllConsentTypesGiven);
+                promise.resolve(result);
+            }
+        }, consentTypes);
     }
 
     @ReactMethod
@@ -126,7 +207,7 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void presentNotification(ReadableMap messageData, String channelId, int notificationId) {
+    public void presentNotification(ReadableMap messageMap, String channelId, int notificationId) {
         int smallIconResId = reactContext.getResources().getIdentifier("ic_notification", "mipmap", reactContext.getPackageName());
         if (smallIconResId == 0) {
             smallIconResId = reactContext.getResources().getIdentifier("ic_launcher", "mipmap", reactContext.getPackageName());
@@ -135,8 +216,7 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
             }
         }
 
-        Map<String, String> message = convertToStringStringMap(messageData.toHashMap());
-        final PushMessage pushContent = InLocoPush.decodeReceivedMessage(reactContext, message);
+        final PushMessage pushContent = InLocoPush.decodeReceivedMessage(reactContext, convertToStringStringMap(messageMap.toHashMap()));
 
         if (pushContent != null) {
             InLocoPush.presentNotification(
@@ -164,7 +244,6 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void registerCheckIn(final String placeName, final String placeId, ReadableMap properties) {
         Map<String, String> propertiesMap = convertToStringStringMap(properties.toHashMap());
-
         CheckIn checkIn = new CheckIn.Builder()
                 .placeName(placeName)
                 .placeId(placeId)
