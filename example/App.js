@@ -60,6 +60,26 @@ export default class App extends Component<Props> {
     
     // iOS specific code
     if (Platform.OS == 'ios') {
+      // The firebase onNotification callback is called when a notification is received and your app is in foreground. 
+      // In this situation, it is up to you to decide if the notification should be shown.
+      this.unsubscribeFromNotificationListener = firebase.notifications().onNotification((notification) => {
+        // Checks whether this is an Engage notification
+        if (InLocoEngage.isInLocoEngageMessage(notification)) {
+          //Presents the notification
+          const localNotification = new firebase.notifications.Notification()
+            .setNotificationId(notification.notificationId)
+            .setTitle(notification.title)
+            .setSubtitle(notification.subtitle)
+            .setBody(notification.body)
+            .setData(notification.data)
+            .ios.setBadge(notification.ios.badge);
+
+          firebase.notifications()
+            .displayNotification(localNotification)
+            .catch(err => console.error(err)); 
+        };
+      });
+
       // The firebase onNotificationOpened is called when the notification is clicked
       this.unsubscribeFromNotificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
         const notification = notificationOpen.notification;
