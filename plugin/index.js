@@ -12,7 +12,18 @@ const CONSENT_TYPES = {
  	INSTALLED_APPS: "installed_apps",
   	LOCATION: "location",
 	CONTEXT_PROVIDER: "context_provider",
-	COVID_19_AID: "covid_19_aid"
+	COVID_19_AID: "covid_19_aid",
+
+	ALL: [
+		"address_validation",
+		"advertisement",
+		"engage",
+		"analytics",
+		"installed_apps",
+		"location",
+		"context_provider"
+	],
+	NONE: []
 };
 
 const init = () => {
