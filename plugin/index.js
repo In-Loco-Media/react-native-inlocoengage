@@ -69,14 +69,19 @@ const trackLocalizedEvent = (name, properties) => {
 	}
 }
 
-const registerCheckIn = (placeName, placeId, properties) => {
-	if (Platform.OS == 'android') {
-		for (var property in properties) {
-			if (properties.hasOwnProperty(property) && properties[property] != null) {
-				properties[property] = properties[property].toString();
-			}
+const registerCheckIn = (placeName, placeId, properties, address) => {
+	for (var property in properties) {
+		if (properties.hasOwnProperty(property) && properties[property] != null) {
+			properties[property] = properties[property].toString();
 		}
+	}
+	if (Platform.OS == 'android') {
 		RNInLocoEngage.registerCheckIn(placeName, placeId, properties);
+	} else if (Platform.OS == 'ios') {
+		if ("locale" in address) {
+			address.locale = address.locale.replace("-", "_");
+		} 
+		RNInLocoEngage.registerCheckIn(placeName, placeId, properties, address);
 	}
 }
  
@@ -145,9 +150,7 @@ const clearUserAddress = () => {
 }
 
 const requestPrivacyConsent = (consentDialogOptions, consentTypes) => {
-	if (Platform.OS == 'android') {
-		RNInLocoEngage.requestPrivacyConsent(consentDialogOptions, consentTypes);
-	}
+	RNInLocoEngage.requestPrivacyConsent(consentDialogOptions, consentTypes);
 }
 
 const giveUserPrivacyConsent = (consentGiven) => {
@@ -159,15 +162,11 @@ const giveUserPrivacyConsentForTypes = (consentTypes) => {
 }
 
 const allowConsentTypes = (consentTypes) => {
-	if (Platform.OS == 'android') {
-		RNInLocoEngage.allowConsentTypes(consentTypes);
-	}
+	RNInLocoEngage.allowConsentTypes(consentTypes);
 }
 
 const setAllowedConsentTypes = (consentTypes) => {
-	if (Platform.OS == 'android') {
-		RNInLocoEngage.setAllowedConsentTypes(consentTypes);
-	}
+	RNInLocoEngage.setAllowedConsentTypes(consentTypes);
 }
 
 const checkPrivacyConsentMissing = () => {
@@ -179,9 +178,7 @@ const checkConsent = (consentTypes) => {
 }
 
 const denyConsentTypes = (consentTypes) => {
-	if (Platform.OS == 'android') {
-		RNInLocoEngage.denyConsentTypes(consentTypes);
-	}
+	RNInLocoEngage.denyConsentTypes(consentTypes);
 }
 
 export default {

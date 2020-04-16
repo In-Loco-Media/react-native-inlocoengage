@@ -130,7 +130,6 @@ export default class App extends Component<Props> {
 
     if (Platform.OS == 'ios') {
       this.unsubscribeFromNotificationListener();
-      this.unsubscribeFromNotificationDisplayedListener();
       this.unsubscribeFromNotificationOpenedListener();
     }
   }
@@ -166,10 +165,27 @@ export default class App extends Component<Props> {
   }
 
   registerCheckIn() {
+    // In this SDK version, this address map is used only on iOS, 
+    // Android will ignore this parameter
+    var address = {
+      locale: "pt-BR",
+      countryName: "Brasil",
+      countryCode: "BR",
+      adminArea: "Pernambuco",
+      subAdminArea: "Recife",
+      locality: "Recife",
+      subLocality: "Pina",
+      thoroughfare: "Av. Engenheiro Antônio de Goes",
+      subThoroughfare: 300,
+      postalCode: "51110-100",
+      latitude: -8.088109,
+      longitude: -34.883838
+    }
+
     InLocoEngage.registerCheckIn("FakePlace", "fakeplaceid", {
       "custom_key_1": "custom_value_1",
       "custom_key_2": "custom_value_2"
-    })
+    }, address)
   }
 
   setUserAddress() {
@@ -208,8 +224,9 @@ export default class App extends Component<Props> {
       ]);
       // It's possible to add a promise to retreive the consent result:
       /* .then((data) => {
+        console.log("InLocoEngage - hasFinished: " + data.hasFinished);
         console.log("InLocoEngage - isWaitingConsent: " + data.isWaitingConsent);
-        console.log(("InLocoEngage - areAllConsentTypesGiven: " + data.areAllConsentTypesGiven);
+        console.log("InLocoEngage - areAllConsentTypesGiven: " + data.areAllConsentTypesGiven);
       }); */
   }
   
@@ -221,9 +238,10 @@ export default class App extends Component<Props> {
       InLocoEngage.CONSENT_TYPES.EVENTS,
       InLocoEngage.CONSENT_TYPES.LOCATION,
     ]).then((data) => {
+      var hasFinished = "hasFinished: " + data.hasFinished + "\n";
       var isWaitingConsent = "isWaitingConsent: " + data.isWaitingConsent + "\n";
       var areAllConsentTypesGiven = "areAllConsentTypesGiven: " + data.areAllConsentTypesGiven;
-      alert(isWaitingConsent + areAllConsentTypesGiven);
+      alert(hasFinished + isWaitingConsent + areAllConsentTypesGiven);
     });
   }
 

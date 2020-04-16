@@ -1,6 +1,7 @@
 package com.inlocomedia.reactnative.engage;
 
 import android.location.Address;
+import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
@@ -119,9 +120,11 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
             InLoco.requestPrivacyConsent(consentDialogOptions.build(), new ConsentListener() {
                 @Override
                 public void onConsentResult(final ConsentResult consentResult) {
+                    boolean hasFinished = consentResult.hasFinished();
                     boolean isWaitingConsent = consentResult.isWaitingConsent();
                     boolean areAllConsentTypesGiven = consentResult.areAllConsentTypesGiven();
                     WritableMap result = Arguments.createMap();
+                    result.putBoolean("hasFinished", hasFinished);
                     result.putBoolean("isWaitingConsent", isWaitingConsent);
                     result.putBoolean("areAllConsentTypesGiven", areAllConsentTypesGiven);
                     promise.resolve(result);
@@ -181,9 +184,11 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
         InLoco.checkConsent(reactContext, new ConsentListener() {
             @Override
             public void onConsentResult(final ConsentResult consentResult) {
+                boolean hasFinished = consentResult.hasFinished();
                 boolean isWaitingConsent = consentResult.isWaitingConsent();
                 boolean areAllConsentTypesGiven = consentResult.areAllConsentTypesGiven();
                 WritableMap result = Arguments.createMap();
+                result.putBoolean("hasFinished", hasFinished);
                 result.putBoolean("isWaitingConsent", isWaitingConsent);
                 result.putBoolean("areAllConsentTypesGiven", areAllConsentTypesGiven);
                 promise.resolve(result);
