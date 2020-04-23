@@ -150,7 +150,7 @@ const clearUserAddress = () => {
 }
 
 const requestPrivacyConsent = (consentDialogOptions, consentTypes) => {
-	RNInLocoEngage.requestPrivacyConsent(consentDialogOptions, consentTypes);
+	return RNInLocoEngage.requestPrivacyConsent(consentDialogOptions, consentTypes);
 }
 
 const giveUserPrivacyConsent = (consentGiven) => {

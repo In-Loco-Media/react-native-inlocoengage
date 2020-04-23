@@ -116,23 +116,21 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
         }
         consentDialogOptions.consentTypes(convertReadableArrayToSet(consentTypesArray));
 
-        if (promise != null) {
-            InLoco.requestPrivacyConsent(consentDialogOptions.build(), new ConsentListener() {
-                @Override
-                public void onConsentResult(final ConsentResult consentResult) {
-                    boolean hasFinished = consentResult.hasFinished();
-                    boolean isWaitingConsent = consentResult.isWaitingConsent();
-                    boolean areAllConsentTypesGiven = consentResult.areAllConsentTypesGiven();
-                    WritableMap result = Arguments.createMap();
-                    result.putBoolean("hasFinished", hasFinished);
-                    result.putBoolean("isWaitingConsent", isWaitingConsent);
-                    result.putBoolean("areAllConsentTypesGiven", areAllConsentTypesGiven);
+        InLoco.requestPrivacyConsent(consentDialogOptions.build(), new ConsentListener() {
+            @Override
+            public void onConsentResult(final ConsentResult consentResult) {
+                boolean hasFinished = consentResult.hasFinished();
+                boolean isWaitingConsent = consentResult.isWaitingConsent();
+                boolean areAllConsentTypesGiven = consentResult.areAllConsentTypesGiven();
+                WritableMap result = Arguments.createMap();
+                result.putBoolean("hasFinished", hasFinished);
+                result.putBoolean("isWaitingConsent", isWaitingConsent);
+                result.putBoolean("areAllConsentTypesGiven", areAllConsentTypesGiven);
+                if(promise != null) {
                     promise.resolve(result);
                 }
-            });
-        } else {
-            InLoco.requestPrivacyConsent(consentDialogOptions.build(), null);
-        }
+            }
+        });
     }
 
     @ReactMethod
@@ -173,7 +171,9 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
             @Override
             public void onResult(Result<Boolean> result) {
                 boolean privacyConsentMissing = result.getResult();
-                promise.resolve(privacyConsentMissing);
+                if(promise != null) {
+                    promise.resolve(privacyConsentMissing);
+                }
             }
         });
     }
@@ -191,7 +191,9 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
                 result.putBoolean("hasFinished", hasFinished);
                 result.putBoolean("isWaitingConsent", isWaitingConsent);
                 result.putBoolean("areAllConsentTypesGiven", areAllConsentTypesGiven);
-                promise.resolve(result);
+                if(promise != null) {
+                    promise.resolve(result);
+                }
             }
         }, consentTypes);
     }

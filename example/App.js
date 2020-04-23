@@ -221,13 +221,11 @@ export default class App extends Component<Props> {
         InLocoEngage.CONSENT_TYPES.ENGAGE, 
         InLocoEngage.CONSENT_TYPES.EVENTS,
         InLocoEngage.CONSENT_TYPES.LOCATION,
-      ]);
-      // It's possible to add a promise to retreive the consent result:
-      /* .then((data) => {
+      ]).then((data) => {
         console.log("InLocoEngage - hasFinished: " + data.hasFinished);
         console.log("InLocoEngage - isWaitingConsent: " + data.isWaitingConsent);
         console.log("InLocoEngage - areAllConsentTypesGiven: " + data.areAllConsentTypesGiven);
-      }); */
+      });
   }
   
   checkConsent() {

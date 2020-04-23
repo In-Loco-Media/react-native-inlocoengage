@@ -83,8 +83,9 @@ RCT_EXPORT_METHOD(requestPrivacyConsent:(NSDictionary *) dialogOptionsDict withC
         [dict setValue:@([result hasFinished]) forKey:@"hasFinished"];
         [dict setValue:@([result areAllConsentTypesGiven]) forKey:@"areAllConsentTypesGiven"];
         [dict setValue:@([result isWaitingConsent]) forKey:@"isWaitingConsent"];
-
-        resolve(dict);
+        if (resolve) {
+            resolve(dict);
+        }
     }];
 }
 
@@ -116,7 +117,10 @@ RCT_EXPORT_METHOD(denyConsentTypes:(NSArray<NSString *> *) consentTypes)
 RCT_EXPORT_METHOD(checkPrivacyConsentMissing:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     [ILMInLoco checkPrivacyConsentMissing:^(BOOL consentMissing) {
-       resolve([NSNumber numberWithBool:consentMissing]);
+        if (resolve) {
+            resolve([NSNumber numberWithBool:consentMissing]);
+        }
+       
     }];
 }
 
@@ -128,7 +132,9 @@ RCT_EXPORT_METHOD(checkConsent:(NSArray<NSString *> *) consentTypes withPromise:
         [dict setValue:@([result hasFinished]) forKey:@"hasFinished"];
         [dict setValue:@([result areAllConsentTypesGiven]) forKey:@"areAllConsentTypesGiven"];
         [dict setValue:@([result isWaitingConsent]) forKey:@"isWaitingConsent"];
-        resolve(dict);
+        if (resolve) {
+            resolve(dict);
+        }
     }];
 }
 
