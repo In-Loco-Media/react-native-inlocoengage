@@ -196,8 +196,22 @@ RCT_EXPORT_METHOD(didFinishLaunchingWithMessage:(NSDictionary *)userInfo)
     ILMPushMessage *message = [[ILMPushMessage alloc] initWithDictionary:userInfo];
     [ILMInLocoPush appDidFinishLaunchingWithMessage:message];
 }
+
+RCT_EXPORT_METHOD(getInstallationId:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    [ILMInLoco getInstallationId:^(NSString* installationId) {
+        if (resolve && installationId) {
+            resolve(installationId);
+        }
+    }];
+}
+
 - (ILMUserAddress *) convertToUserAddress:(NSDictionary *)addressDict
 {
+    if (addressDict == nil) {
+        return nil;
+    }
+    
     ILMUserAddress *userAddress = [[ILMUserAddress alloc] init];
     
     NSLocale *locale;

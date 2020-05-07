@@ -256,7 +256,7 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
                 .placeId(placeId)
                 .extras(propertiesMap)
                 .build();
-
+        
         InLocoVisits.registerCheckIn(reactContext, checkIn);
     }
 
@@ -269,6 +269,19 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void clearUserAddress() {
         InLocoAddressValidation.clearAddress(reactContext);
+    }
+
+    @ReactMethod
+    public void getInstallationId(final Promise promise) {
+        InLoco.getInstallationId(reactContext, new InLocoListener<String>() {
+            @Override
+            public void onResult(Result<String> result) {
+                String installationId = result.getResult();
+                if(promise != null) {
+                    promise.resolve(installationId);
+                }
+            }
+        });
     }
 
     private static Address convertMapToAddress(ReadableMap map) {
