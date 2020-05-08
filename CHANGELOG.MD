@@ -1,3 +1,20 @@
+Release 5.1.0
+===
+- Exposes method to obtain the installation id
+- Updates In Loco SDK version to 5.2 on Android and iOS
+- Minor fixes
+
+Release 5.0.1
+===
+- Fixes promise return on requestPrivacyConsent method
+
+Release 5.0.0
+===
+- Exposes privacy related methods
+- Exposes check-in method on iOS
+- Updates In Loco SDK version to 5.1 on Android and iOS
+- Adds SDK initialization option through file
+
 Release 4.0.0
 ===
 - Exposes privacy related methods

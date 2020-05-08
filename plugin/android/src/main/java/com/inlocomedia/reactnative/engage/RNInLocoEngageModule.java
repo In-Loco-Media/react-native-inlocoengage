@@ -170,9 +170,13 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
         InLoco.checkPrivacyConsentMissing(reactContext, new InLocoListener<Boolean>() {
             @Override
             public void onResult(Result<Boolean> result) {
-                boolean privacyConsentMissing = result.getResult();
-                if(promise != null) {
-                    promise.resolve(privacyConsentMissing);
+                if (result.isSuccessful()) {
+                    boolean privacyConsentMissing = result.getResult();
+                    if(promise != null) {
+                        promise.resolve(privacyConsentMissing);
+                    }
+                } else {
+                    promise.reject(new Exception("Error while checking if privacy consent is missing."));
                 }
             }
         });
@@ -269,6 +273,23 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void clearUserAddress() {
         InLocoAddressValidation.clearAddress(reactContext);
+    }
+
+    @ReactMethod
+    public void getInstallationId(final Promise promise) {
+        InLoco.getInstallationId(reactContext, new InLocoListener<String>() {
+            @Override
+            public void onResult(Result<String> result) {
+                if (result.isSuccessful()) {
+                    String installationId = result.getResult();
+                    if (promise != null) {
+                        promise.resolve(installationId);
+                    }
+                } else {
+                    promise.reject(new Exception("Error while getting installation id."));
+                }
+            }
+        });
     }
 
     private static Address convertMapToAddress(ReadableMap map) {

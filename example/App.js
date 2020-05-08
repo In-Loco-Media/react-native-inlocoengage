@@ -273,6 +273,13 @@ export default class App extends Component<Props> {
     ]);
   }
 
+  getInstallationId() {
+    InLocoEngage.getInstallationId()
+    .then((installationId) => {
+      alert("InstallationId: " + installationId);
+    });
+  }
+
   render() {
     return (
       <SafeAreaView style={styles.container}>
@@ -318,6 +325,9 @@ export default class App extends Component<Props> {
           </View>
           <View style={styles.buttonContainer}>
             <Button color="#80BA40" title="Deny Consent Types" onPress={() => this.denyConsentTypes()}></Button>
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button color="#80BA40" title="Get Installation Id" onPress={() => this.getInstallationId()}></Button>
           </View>
         </ScrollView>
       </SafeAreaView>
