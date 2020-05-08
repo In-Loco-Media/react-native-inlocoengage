@@ -120,7 +120,6 @@ RCT_EXPORT_METHOD(checkPrivacyConsentMissing:(RCTPromiseResolveBlock)resolve rej
         if (resolve) {
             resolve([NSNumber numberWithBool:consentMissing]);
         }
-       
     }];
 }
 
@@ -202,6 +201,8 @@ RCT_EXPORT_METHOD(getInstallationId:(RCTPromiseResolveBlock)resolve rejecter:(RC
     [ILMInLoco getInstallationId:^(NSString* installationId) {
         if (resolve && installationId) {
             resolve(installationId);
+        } else {
+            reject(nil, @"InlocoException: Error while getting installation id", nil);
         }
     }];
 }

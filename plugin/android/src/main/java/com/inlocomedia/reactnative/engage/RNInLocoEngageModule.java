@@ -170,9 +170,13 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
         InLoco.checkPrivacyConsentMissing(reactContext, new InLocoListener<Boolean>() {
             @Override
             public void onResult(Result<Boolean> result) {
-                boolean privacyConsentMissing = result.getResult();
-                if(promise != null) {
-                    promise.resolve(privacyConsentMissing);
+                if (result.isSuccessful()) {
+                    boolean privacyConsentMissing = result.getResult();
+                    if(promise != null) {
+                        promise.resolve(privacyConsentMissing);
+                    }
+                } else {
+                    promise.reject(new Exception("Error while checking if privacy consent is missing."));
                 }
             }
         });
@@ -256,7 +260,7 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
                 .placeId(placeId)
                 .extras(propertiesMap)
                 .build();
-        
+
         InLocoVisits.registerCheckIn(reactContext, checkIn);
     }
 
@@ -276,9 +280,13 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
         InLoco.getInstallationId(reactContext, new InLocoListener<String>() {
             @Override
             public void onResult(Result<String> result) {
-                String installationId = result.getResult();
-                if(promise != null) {
-                    promise.resolve(installationId);
+                if (result.isSuccessful()) {
+                    String installationId = result.getResult();
+                    if (promise != null) {
+                        promise.resolve(installationId);
+                    }
+                } else {
+                    promise.reject(new Exception("Error while getting installation id."));
                 }
             }
         });
