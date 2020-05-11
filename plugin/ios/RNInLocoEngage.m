@@ -164,6 +164,11 @@ RCT_EXPORT_METHOD(trackEvent:(NSString *)name properties:(NSDictionary *)propert
     [ILMInLocoEvents trackEvent:name properties:properties];
 }
 
+RCT_EXPORT_METHOD(trackLocalizedEvent:(NSString *)name properties:(NSDictionary *)properties)
+{
+    [ILMInLocoVisits trackLocalizedEvent:name properties:properties];
+}
+
 RCT_EXPORT_METHOD(registerCheckIn:(NSString *)placeName placeId:(NSString *)placeId properties:(NSDictionary *)properties address:(NSDictionary *)addressDict)
 {
     ILMUserAddress *userAddress = [self convertToUserAddress:addressDict];
