@@ -59,14 +59,12 @@ const trackEvent = (name, properties) => {
 }
 
 const trackLocalizedEvent = (name, properties) => {
-	if (Platform.OS == 'android') {
-		for (var property in properties) {
-			if (properties.hasOwnProperty(property) && properties[property] != null) {
-				properties[property] = properties[property].toString();
-			}
+	for (var property in properties) {
+		if (properties.hasOwnProperty(property) && properties[property] != null) {
+			properties[property] = properties[property].toString();
 		}
-		RNInLocoEngage.trackLocalizedEvent(name, properties);
 	}
+	RNInLocoEngage.trackLocalizedEvent(name, properties);
 }
 
 const registerCheckIn = (placeName, placeId, properties, address) => {
