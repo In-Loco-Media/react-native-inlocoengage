@@ -1,24 +1,36 @@
 package com.inlocomedia.reactnative.engage;
 
-import android.Manifest;
 import android.location.Address;
+import android.util.Log;
 
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
-import com.inlocomedia.android.engagement.InLocoEngagement;
-import com.inlocomedia.android.engagement.InLocoEngagementCheckIn;
-import com.inlocomedia.android.engagement.InLocoEngagementOptions;
+import com.facebook.react.bridge.WritableMap;
+import com.inlocomedia.android.common.ConsentDialogOptions;
+import com.inlocomedia.android.common.ConsentResult;
+import com.inlocomedia.android.common.InLoco;
+import com.inlocomedia.android.common.InLocoEvents;
+import com.inlocomedia.android.common.InLocoOptions;
+import com.inlocomedia.android.common.listener.ConsentListener;
+import com.inlocomedia.android.common.listener.InLocoListener;
+import com.inlocomedia.android.common.listener.Result;
+import com.inlocomedia.android.engagement.InLocoAddressValidation;
+import com.inlocomedia.android.engagement.InLocoPush;
 import com.inlocomedia.android.engagement.PushMessage;
 import com.inlocomedia.android.engagement.request.PushProvider;
-import com.inlocomedia.android.engagement.user.EngageUser;
+import com.inlocomedia.android.location.CheckIn;
+import com.inlocomedia.android.location.InLocoVisits;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
 
@@ -41,8 +53,15 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
     private static String OPTIONS_APP_ID = "appId";
     private static String OPTIONS_LOGS_ENABLED = "logsEnabled";
     private static String OPTIONS_DEVELOPMENT_DEVICES = "developmentDevices";
-    private static String OPTIONS_LOCATION_ENABLED = "locationEnabled";
+    private static String OPTIONS_VISITS_ENABLED = "visitsEnabled";
     private static String OPTIONS_REQUIRES_USER_PRIVACY_CONSENT = "userPrivacyConsentRequired";
+    private static String OPTIONS_BACKGROUND_WAKEUP_ENABLED = "backgroundWakeupEnabled";
+    private static String OPTIONS_SCREEN_TRACKING_ENABLED = "screenTrackingEnabled";
+
+    private static String CONSENT_DIALOG_TITLE = "consentDialogTitle";
+    private static String CONSENT_DIALOG_MESSAGE = "consentDialogMessage";
+    private static String CONSENT_DIALOG_ACCEPT_TEXT = "consentDialogAcceptText";
+    private static String CONSENT_DIALOG_DENY_TEXT= "consentDialogDenyText";
 
     private final ReactApplicationContext reactContext;
 
@@ -52,42 +71,135 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void init(final ReadableMap optionsMap) {
-        InLocoEngagementOptions options = InLocoEngagementOptions.getInstance(reactContext);
-        options.setApplicationId(optionsMap.getString(OPTIONS_APP_ID));
-        options.setLogEnabled(optionsMap.getBoolean(OPTIONS_LOGS_ENABLED));
-        options.setLocationTrackingEnabled(optionsMap.getBoolean(OPTIONS_LOCATION_ENABLED));
-        options.setRequiresUserPrivacyConsent(optionsMap.getBoolean(OPTIONS_REQUIRES_USER_PRIVACY_CONSENT));
+    public void initSdk() {
+        InLoco.init(reactContext);
+    }
 
-        ReadableArray developmentDevicesReadableArr = optionsMap.getArray(OPTIONS_DEVELOPMENT_DEVICES);
-        if (developmentDevicesReadableArr != null) {
-            String[] developmentDevicesArr = new String[developmentDevicesReadableArr.size()];
-            developmentDevicesArr = developmentDevicesReadableArr.toArrayList().toArray(developmentDevicesArr);
-            options.setDevelopmentDevices(developmentDevicesArr);
-        }
+    @ReactMethod
+    public void initSdkWithOptions(final ReadableMap optionsMap) {
+        InLocoOptions.Builder options = new InLocoOptions.Builder();
+        options.appId(optionsMap.getString(OPTIONS_APP_ID));
+        options.logEnabled(optionsMap.getBoolean(OPTIONS_LOGS_ENABLED));
+        options.visitsEnabledByDefault(optionsMap.getBoolean(OPTIONS_VISITS_ENABLED));
+        options.privacyConsentRequired(optionsMap.getBoolean(OPTIONS_REQUIRES_USER_PRIVACY_CONSENT));
+        options.backgroundWakeupEnabled(optionsMap.getBoolean(OPTIONS_BACKGROUND_WAKEUP_ENABLED));
+        options.screenTrackingEnabled(optionsMap.getBoolean(OPTIONS_SCREEN_TRACKING_ENABLED));
+        options.developmentDevices(convertReadableArrayToSet(optionsMap.getArray(OPTIONS_DEVELOPMENT_DEVICES)));
 
-        InLocoEngagement.init(reactContext, options);
+        InLoco.init(reactContext, options.build());
     }
 
     @ReactMethod
     public void setUser(final String userId) {
-        EngageUser user = new EngageUser(userId);
-        InLocoEngagement.setUser(reactContext, user);
+        InLoco.setUserId(reactContext, userId);
     }
 
     @ReactMethod
     public void clearUser() {
-        InLocoEngagement.clearUser(reactContext);
+        InLoco.clearUserId(reactContext);
     }
 
     @ReactMethod
+    public void requestPrivacyConsent(final ReadableMap consentDialogOptionsMap, final ReadableArray consentTypesArray, final Promise promise) {
+        ConsentDialogOptions.Builder consentDialogOptions = new ConsentDialogOptions.Builder(reactContext.getCurrentActivity());
+        if (consentDialogOptionsMap.hasKey(CONSENT_DIALOG_TITLE)) {
+            consentDialogOptions.title(consentDialogOptionsMap.getString(CONSENT_DIALOG_TITLE));
+        }
+        if (consentDialogOptionsMap.hasKey(CONSENT_DIALOG_MESSAGE)) {
+            consentDialogOptions.message(consentDialogOptionsMap.getString(CONSENT_DIALOG_MESSAGE));
+        }
+        if (consentDialogOptionsMap.hasKey(CONSENT_DIALOG_ACCEPT_TEXT)) {
+            consentDialogOptions.acceptText(consentDialogOptionsMap.getString(CONSENT_DIALOG_ACCEPT_TEXT));
+        }
+        if (consentDialogOptionsMap.hasKey(CONSENT_DIALOG_DENY_TEXT)) {
+            consentDialogOptions.denyText(consentDialogOptionsMap.getString(CONSENT_DIALOG_DENY_TEXT));
+        }
+        consentDialogOptions.consentTypes(convertReadableArrayToSet(consentTypesArray));
+
+        InLoco.requestPrivacyConsent(consentDialogOptions.build(), new ConsentListener() {
+            @Override
+            public void onConsentResult(final ConsentResult consentResult) {
+                boolean hasFinished = consentResult.hasFinished();
+                boolean isWaitingConsent = consentResult.isWaitingConsent();
+                boolean areAllConsentTypesGiven = consentResult.areAllConsentTypesGiven();
+                WritableMap result = Arguments.createMap();
+                result.putBoolean("hasFinished", hasFinished);
+                result.putBoolean("isWaitingConsent", isWaitingConsent);
+                result.putBoolean("areAllConsentTypesGiven", areAllConsentTypesGiven);
+                if(promise != null) {
+                    promise.resolve(result);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    @Deprecated
     public void giveUserPrivacyConsent(final boolean consentGiven) {
-        InLocoEngagement.givePrivacyConsent(reactContext, consentGiven);
+        InLoco.givePrivacyConsent(reactContext, consentGiven);
     }
 
     @ReactMethod
-    public void isWaitingUserPrivacyConsent(Promise promise) {
-        promise.resolve(InLocoEngagement.isWaitingUserPrivacyConsent(reactContext));
+    @Deprecated
+    public void giveUserPrivacyConsentForTypes(final ReadableArray consentTypesArray) {
+        Set<String> consentTypes = convertReadableArrayToSet(consentTypesArray);
+        InLoco.givePrivacyConsent(reactContext, consentTypes);
+    }
+
+    @ReactMethod
+    public void setAllowedConsentTypes(final ReadableArray consentTypesArray) {
+        Set<String> consentTypes = convertReadableArrayToSet(consentTypesArray);
+        InLoco.setAllowedConsentTypes(reactContext, consentTypes);
+    }
+
+    @ReactMethod
+    public void allowConsentTypes(final ReadableArray consentTypesArray) {
+        Set<String> consentTypes = convertReadableArrayToSet(consentTypesArray);
+        InLoco.allowConsentTypes(reactContext, consentTypes);
+    }
+
+    @ReactMethod
+    public void denyConsentTypes(final ReadableArray consentTypesArray) {
+        Set<String> consentTypes = convertReadableArrayToSet(consentTypesArray);
+        InLoco.denyConsentTypes(reactContext, consentTypes);
+    }
+
+    @ReactMethod
+    @Deprecated
+    public void checkPrivacyConsentMissing(final Promise promise) {
+        InLoco.checkPrivacyConsentMissing(reactContext, new InLocoListener<Boolean>() {
+            @Override
+            public void onResult(Result<Boolean> result) {
+                if (result.isSuccessful()) {
+                    boolean privacyConsentMissing = result.getResult();
+                    if(promise != null) {
+                        promise.resolve(privacyConsentMissing);
+                    }
+                } else {
+                    promise.reject(new Exception("Error while checking if privacy consent is missing."));
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void checkConsent(final ReadableArray consentTypesArray, final Promise promise) {
+        Set<String> consentTypes = convertReadableArrayToSet(consentTypesArray);
+        InLoco.checkConsent(reactContext, new ConsentListener() {
+            @Override
+            public void onConsentResult(final ConsentResult consentResult) {
+                boolean hasFinished = consentResult.hasFinished();
+                boolean isWaitingConsent = consentResult.isWaitingConsent();
+                boolean areAllConsentTypesGiven = consentResult.areAllConsentTypesGiven();
+                WritableMap result = Arguments.createMap();
+                result.putBoolean("hasFinished", hasFinished);
+                result.putBoolean("isWaitingConsent", isWaitingConsent);
+                result.putBoolean("areAllConsentTypesGiven", areAllConsentTypesGiven);
+                if(promise != null) {
+                    promise.resolve(result);
+                }
+            }
+        }, consentTypes);
     }
 
     @ReactMethod
@@ -97,22 +209,16 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
                 .setToken(token)
                 .build();
 
-        InLocoEngagement.setPushProvider(reactContext, pushProvider);
+        InLocoPush.setPushProvider(reactContext, pushProvider);
     }
 
     @ReactMethod
     public void setPushNotificationsEnabled(final boolean enabled) {
-        InLocoEngagement.setPushNotificationsEnabled(reactContext, enabled);
+        InLocoPush.setEnabled(reactContext, enabled);
     }
 
     @ReactMethod
-    public void requestLocationPermission() {
-        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
-        InLocoEngagement.requestPermissions(reactContext.getCurrentActivity(), permissions, false, null);
-    }
-
-    @ReactMethod
-    public void presentNotification(String dataJsonString, String channelId, int notificationId) {
+    public void presentNotification(ReadableMap messageMap, String channelId, int notificationId) {
         int smallIconResId = reactContext.getResources().getIdentifier("ic_notification", "mipmap", reactContext.getPackageName());
         if (smallIconResId == 0) {
             smallIconResId = reactContext.getResources().getIdentifier("ic_launcher", "mipmap", reactContext.getPackageName());
@@ -121,10 +227,10 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
             }
         }
 
-        final PushMessage pushContent = InLocoEngagement.decodeReceivedMessage(reactContext, dataJsonString);
+        final PushMessage pushContent = InLocoPush.decodeReceivedMessage(reactContext, convertToStringStringMap(messageMap.toHashMap()));
 
         if (pushContent != null) {
-            InLocoEngagement.presentNotification(
+            InLocoPush.presentNotification(
                     reactContext,
                     pushContent,
                     smallIconResId,
@@ -137,37 +243,53 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void trackEvent(final String eventName, ReadableMap properties) {
         Map<String, String> propertiesMap = convertToStringStringMap(properties.toHashMap());
-        InLocoEngagement.trackEvent(reactContext, eventName, propertiesMap);
+        InLocoEvents.trackEvent(reactContext, eventName, propertiesMap);
     }
 
     @ReactMethod
     public void trackLocalizedEvent(final String eventName, ReadableMap properties) {
         Map<String, String> propertiesMap = convertToStringStringMap(properties.toHashMap());
-        InLocoEngagement.trackLocalizedEvent(reactContext, eventName, propertiesMap);
+        InLocoVisits.trackLocalizedEvent(reactContext, eventName, propertiesMap);
     }
 
     @ReactMethod
     public void registerCheckIn(final String placeName, final String placeId, ReadableMap properties) {
         Map<String, String> propertiesMap = convertToStringStringMap(properties.toHashMap());
-
-        InLocoEngagementCheckIn checkIn = new InLocoEngagementCheckIn.Builder()
+        CheckIn checkIn = new CheckIn.Builder()
                 .placeName(placeName)
                 .placeId(placeId)
                 .extras(propertiesMap)
                 .build();
 
-        InLocoEngagement.registerCheckIn(reactContext, checkIn);
+        InLocoVisits.registerCheckIn(reactContext, checkIn);
     }
 
     @ReactMethod
     public void setUserAddress(ReadableMap addressMap) {
         Address address = convertMapToAddress(addressMap);
-        InLocoEngagement.setUserAddress(reactContext, address);
+        InLocoAddressValidation.setAddress(reactContext, address);
     }
 
     @ReactMethod
     public void clearUserAddress() {
-        InLocoEngagement.clearUserAddress(reactContext);
+        InLocoAddressValidation.clearAddress(reactContext);
+    }
+
+    @ReactMethod
+    public void getInstallationId(final Promise promise) {
+        InLoco.getInstallationId(reactContext, new InLocoListener<String>() {
+            @Override
+            public void onResult(Result<String> result) {
+                if (result.isSuccessful()) {
+                    String installationId = result.getResult();
+                    if (promise != null) {
+                        promise.resolve(installationId);
+                    }
+                } else {
+                    promise.reject(new Exception("Error while getting installation id."));
+                }
+            }
+        });
     }
 
     private static Address convertMapToAddress(ReadableMap map) {
@@ -222,6 +344,14 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
             }
         }
         return newMap;
+    }
+
+    private static Set<String> convertReadableArrayToSet(ReadableArray array) {
+        Set<String> set = new HashSet<>();
+        for (int i = 0; i < array.size(); i++) {
+            set.add(array.getString(i));
+        }
+        return set;
     }
 
     private static Locale localeFromString(String locale) {

@@ -5227,9 +5227,9 @@ react-native-firebase@5.5.6:
     prop-types "^15.7.2"
 
 react-native-inlocoengage@4.0.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/react-native-inlocoengage/-/react-native-inlocoengage-3.1.0.tgz#a303946f3005c586af059009b242dd1af27d0d65"
-  integrity sha512-OB/WyoyScH8eMziQmRa9nxoddMxRRcfYfnUSG+qU6RFH0aHz27LNzTwUmIDVXTPubvym6UDwgMR7b59c6w3IgQ==
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-inlocoengage/-/react-native-inlocoengage-4.0.0.tgz#9808def8e1a4f18deb1bbd6324ad10f4ecdf2b6e"
+  integrity sha512-BF0DEDmUEzIugIikQHG+gFlWyUygAHxMuvrbXbvxOMypeZiyQHV747LT1TAtmrvUdrbNsgkuqWeG+28DmDFb5A==
 
 react-native-permissions@^2.0.3:
   version "2.0.3"
