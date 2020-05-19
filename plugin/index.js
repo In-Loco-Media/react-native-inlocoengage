@@ -78,7 +78,7 @@ const registerCheckIn = (placeName, placeId, properties, address) => {
 	if (Platform.OS == 'android') {
 		RNInLocoEngage.registerCheckIn(placeName, placeId, properties);
 	} else if (Platform.OS == 'ios') {
-		if ("locale" in address) {
+		if (address != null && "locale" in address)  {
 			address.locale = address.locale.replace("-", "_");
 		} 
 		RNInLocoEngage.registerCheckIn(placeName, placeId, properties, address);
@@ -136,10 +136,10 @@ const getUrl = (notification) => {
 }
 
 const setUserAddress = (address) => {
-	if ("subThoroughfare" in address) {
+	if (address != null && "subThoroughfare" in address) {
 		address.subThoroughfare = String(address.subThoroughfare);
 	}
-	if (Platform.OS == 'ios' && "locale" in address) {
+	if (Platform.OS == 'ios' && address != null && "locale" in address) {
 		address.locale = address.locale.replace("-", "_");
 	}  
 	RNInLocoEngage.setUserAddress(address);
@@ -181,6 +181,10 @@ const denyConsentTypes = (consentTypes) => {
 	RNInLocoEngage.denyConsentTypes(consentTypes);
 }
 
+const getInstallationId = () => {
+	return RNInLocoEngage.getInstallationId();
+}
+
 export default {
 	init,
 	initWithOptions,
@@ -207,5 +211,6 @@ export default {
 	checkPrivacyConsentMissing,
 	checkConsent,
 	denyConsentTypes,
+	getInstallationId,
 	CONSENT_TYPES
 };
