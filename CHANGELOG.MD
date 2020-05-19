@@ -1,3 +1,7 @@
+Release 5.2.0
+===
+- Exposes track localized event method on iOS
+
 Release 5.1.0
 ===
 - Exposes method to obtain the installation id
