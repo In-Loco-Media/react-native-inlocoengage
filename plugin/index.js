@@ -4,20 +4,48 @@ import { Platform } from 'react-native';
 
 const { RNInLocoEngage } = NativeModules;
 
-const init = (options) => {
+const CONSENT_TYPES = {
+	ADDRESS_VALIDATION: "address_validation",
+  	ADVERTISEMENT: "advertisement",
+  	ENGAGE: "engage",
+  	EVENTS: "analytics",
+ 	INSTALLED_APPS: "installed_apps",
+  	LOCATION: "location",
+	CONTEXT_PROVIDER: "context_provider",
+	COVID_19_AID: "covid_19_aid",
+
+	ALL: [
+		"address_validation",
+		"advertisement",
+		"engage",
+		"analytics",
+		"installed_apps",
+		"location",
+		"context_provider"
+	],
+	NONE: []
+};
+
+const init = () => {
+	RNInLocoEngage.initSdk();
+}
+
+const initWithOptions = (options) => {
 	if (!('appId' in options)) options.appId = null;
 	if (!('logsEnabled' in options)) options.logsEnabled = false;
 	if (!('developmentDevices' in options)) options.developmentDevices = [];
 	if (!('userPrivacyConsentRequired' in options)) options.userPrivacyConsentRequired = false;
-	if (!('locationEnabled' in options)) options.locationEnabled = true;
-	RNInLocoEngage.init(options);
+	if (!('visitsEnabled' in options)) options.visitsEnabled = true;
+	if (!('backgroundWakeupEnabled' in options)) options.backgroundWakeupEnabled = true;
+	if (!('screenTrackingEnabled' in options)) options.screenTrackingEnabled = false;
+	RNInLocoEngage.initSdkWithOptions(options);
 }
 
 const setUser = (userId) => {
 	RNInLocoEngage.setUser(userId);
 }
 
-const clearUser = (clearUser) => {
+const clearUser = () => {
 	RNInLocoEngage.clearUser();
 }
 
@@ -41,14 +69,19 @@ const trackLocalizedEvent = (name, properties) => {
 	}
 }
 
-const registerCheckIn = (placeName, placeId, properties) => {
-	if (Platform.OS == 'android') {
-		for (var property in properties) {
-			if (properties.hasOwnProperty(property) && properties[property] != null) {
-				properties[property] = properties[property].toString();
-			}
+const registerCheckIn = (placeName, placeId, properties, address) => {
+	for (var property in properties) {
+		if (properties.hasOwnProperty(property) && properties[property] != null) {
+			properties[property] = properties[property].toString();
 		}
+	}
+	if (Platform.OS == 'android') {
 		RNInLocoEngage.registerCheckIn(placeName, placeId, properties);
+	} else if (Platform.OS == 'ios') {
+		if ("locale" in address) {
+			address.locale = address.locale.replace("-", "_");
+		} 
+		RNInLocoEngage.registerCheckIn(placeName, placeId, properties, address);
 	}
 }
  
@@ -78,19 +111,7 @@ const isInLocoEngageMessage = (message) => {
 const presentNotification = (message, notificationId, channelId) => {
 	if (Platform.OS == 'android') {
 		notificationId = notificationId || 1111111;
-		RNInLocoEngage.presentNotification(message.data['in_loco_data'], channelId, notificationId);
-	}
-}
-
-const onNotificationReceived = (notification) => {
-	if (Platform.OS == 'ios' && notification != null && 'in_loco_data' in notification.data) {
-		RNInLocoEngage.didReceiveRemoteNotification(notification.data);
-	}
-}
-
-const onNotificationPresented = (notification) => {
-	if (Platform.OS == 'ios' && notification != null && 'in_loco_data' in notification.data) {
-		RNInLocoEngage.didPresentNotification(notification.data);
+		RNInLocoEngage.presentNotification(message.data, channelId, notificationId);
 	}
 }
 
@@ -128,33 +149,63 @@ const clearUserAddress = () => {
 	RNInLocoEngage.clearUserAddress();
 }
 
+const requestPrivacyConsent = (consentDialogOptions, consentTypes) => {
+	RNInLocoEngage.requestPrivacyConsent(consentDialogOptions, consentTypes);
+}
+
 const giveUserPrivacyConsent = (consentGiven) => {
 	RNInLocoEngage.giveUserPrivacyConsent(consentGiven);
 }
 
-const isWaitingUserPrivacyConsent = () => {
-	return RNInLocoEngage.isWaitingUserPrivacyConsent();
+const giveUserPrivacyConsentForTypes = (consentTypes) => {
+	RNInLocoEngage.giveUserPrivacyConsentForTypes(consentTypes);
+}
+
+const allowConsentTypes = (consentTypes) => {
+	RNInLocoEngage.allowConsentTypes(consentTypes);
+}
+
+const setAllowedConsentTypes = (consentTypes) => {
+	RNInLocoEngage.setAllowedConsentTypes(consentTypes);
+}
+
+const checkPrivacyConsentMissing = () => {
+	return RNInLocoEngage.checkPrivacyConsentMissing();
+}
+
+const checkConsent = (consentTypes) => {
+	return RNInLocoEngage.checkConsent(consentTypes);
+}
+
+const denyConsentTypes = (consentTypes) => {
+	RNInLocoEngage.denyConsentTypes(consentTypes);
 }
 
 export default {
-	init: init,
-	setUser: setUser,
-	clearUser: clearUser,
-	trackEvent: trackEvent,
-	setPushProvider: setPushProvider,
-	setFirebasePushProvider: setFirebasePushProvider,
-	setPushNotificationsEnabled: setPushNotificationsEnabled,
-	isInLocoEngageMessage: isInLocoEngageMessage,
-	presentNotification: presentNotification,
-	onNotificationReceived: onNotificationReceived,
-	onNotificationPresented: onNotificationPresented,
-	onNotificationClicked: onNotificationClicked,
-	onAppLaunchedWithNotification: onAppLaunchedWithNotification,
-	getUrl: getUrl,
-	setUserAddress: setUserAddress,
-	clearUserAddress: clearUserAddress,
-	giveUserPrivacyConsent: giveUserPrivacyConsent,
-	isWaitingUserPrivacyConsent: isWaitingUserPrivacyConsent,
-	trackLocalizedEvent: trackLocalizedEvent,
-	registerCheckIn: registerCheckIn
+	init,
+	initWithOptions,
+	setUser,
+	clearUser,
+	trackEvent,
+	trackLocalizedEvent,
+	registerCheckIn, 
+	setPushProvider,
+	setFirebasePushProvider,
+	setPushNotificationsEnabled,
+	isInLocoEngageMessage,
+	presentNotification,
+	onNotificationClicked,
+	onAppLaunchedWithNotification,
+	getUrl,
+	setUserAddress,
+	clearUserAddress,
+	requestPrivacyConsent,
+	giveUserPrivacyConsent,
+	giveUserPrivacyConsentForTypes,
+	allowConsentTypes,
+	setAllowedConsentTypes,
+	checkPrivacyConsentMissing,
+	checkConsent,
+	denyConsentTypes,
+	CONSENT_TYPES
 };

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Button, Linking} from 'react-native';
+import {Platform, StyleSheet, View, ScrollView, SafeAreaView, Button, Linking} from 'react-native';
 import InLocoEngage from 'react-native-inlocoengage';
 import firebase from 'react-native-firebase';
 import {request, requestNotifications, PERMISSIONS} from 'react-native-permissions';
@@ -31,7 +31,10 @@ export default class App extends Component<Props> {
     }
 
     // In Loco Engage initialization
-    InLocoEngage.init(options);
+    // Initiate SDK retreiving the options from InLoco file (xml/plist)
+    InLocoEngage.init();
+    // Another way to initate the SDK is using the Options Object:
+    //InLocoEngage.initWithOptions(options);
 
     // Register a token refresh listener
     this.unsubscribeFromTokenRefreshListener = firebase.messaging().onTokenRefresh((fcmToken) => {
@@ -43,24 +46,24 @@ export default class App extends Component<Props> {
       InLocoEngage.setFirebasePushProvider(fcmToken);
     });
     
-    //Android specific code
+    // Android specific code
     if (Platform.OS == 'android') {
-      //Engage messages are received on Android through the onMessage fireabase callback
+      // Engage messages are received on Android through the onMessage fireabase callback
       this.unsubscribeFromMessageListener = firebase.messaging().onMessage((message) => {
-        //Checks whether this is an Engage message
+        // Checks whether this is an Engage message
         if (InLocoEngage.isInLocoEngageMessage(message)) {
-          //Presents the notification. The tracking of reception, impression and click is done automatically
+          // Presents the notification. The tracking of reception, impression and click is done automatically
           InLocoEngage.presentNotification(message);
         }
       });  
     }
     
-    //iOS specific code
+    // iOS specific code
     if (Platform.OS == 'ios') {
-      //The firebase onNotification callback is called when a notification is received and your app is in foreground. 
-      //In this situation, it is up to you to decide if the notification should be shown.
+      // The firebase onNotification callback is called when a notification is received and your app is in foreground. 
+      // In this situation, it is up to you to decide if the notification should be shown.
       this.unsubscribeFromNotificationListener = firebase.notifications().onNotification((notification) => {
-        //Checks whether this is an Engage notification
+        // Checks whether this is an Engage notification
         if (InLocoEngage.isInLocoEngageMessage(notification)) {
           //Presents the notification
           const localNotification = new firebase.notifications.Notification()
@@ -73,31 +76,19 @@ export default class App extends Component<Props> {
 
           firebase.notifications()
             .displayNotification(localNotification)
-            .catch(err => console.error(err));
-          
-          //Call InLocoEngage.onNotificationReceived() method to correctly update the push metrics
-          InLocoEngage.onNotificationReceived(notification);
+            .catch(err => console.error(err)); 
         };
       });
 
-      //The firebase onNotificationDisplayed is called when the notification is shown
-      this.unsubscribeFromNotificationDisplayedListener = firebase.notifications().onNotificationDisplayed((notification) => {
-        //Checks whether this is an Engage notification
-        if (InLocoEngage.isInLocoEngageMessage(notification)) {
-          //Call InLocoEngage.onNotificationPresented() method to correctly update the push metrics
-          InLocoEngage.onNotificationPresented(notification);
-        }
-      });
-      
-      //The firebase onNotificationOpened is called when the notification is clicked
+      // The firebase onNotificationOpened is called when the notification is clicked
       this.unsubscribeFromNotificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
         const notification = notificationOpen.notification;
-        //Checks whether this is an Engage notification
+        // Checks whether this is an Engage notification
         if (InLocoEngage.isInLocoEngageMessage(notification)) {
-          //Call InLocoEngage.onNotificationClicked() method to correctly update the push metrics
+          // Call InLocoEngage.onNotificationClicked() method to correctly update the push metrics
           InLocoEngage.onNotificationClicked(notification);
           
-          //Open the notification link if possible
+          // Open the notification link if possible
           const url = InLocoEngage.getUrl(notification)
           Linking.canOpenURL(url).then(supported => {
             if (supported) {
@@ -107,16 +98,16 @@ export default class App extends Component<Props> {
         }
       });
       
-      //If the app was closed and a notification was clicked, it will be available through the getInitialNotification() function
+      // If the app was closed and a notification was clicked, it will be available through the getInitialNotification() function
       firebase.notifications().getInitialNotification().then((notificationOpen) => {
         if (notificationOpen) {
           const notification = notificationOpen.notification;
-          //Checks whether this is an Engage notification
+          // Checks whether this is an Engage notification
           if (InLocoEngage.isInLocoEngageMessage(notification)) {
-            //Call InLocoEngage.onAppLaunchedWithNotification() method to correctly update counters
+            // Call InLocoEngage.onAppLaunchedWithNotification() method to correctly update counters
             InLocoEngage.onAppLaunchedWithNotification(notification);
 
-            //Open the notification link if possible
+            // Open the notification link if possible
             const url = InLocoEngage.getUrl(notification)
             Linking.canOpenURL(url).then(supported => {
               if (supported) {
@@ -130,7 +121,7 @@ export default class App extends Component<Props> {
   }
 
   componentWillUnmount() {
-    //Unsubscribe from listeners
+    // Unsubscribe from listeners
     this.unsubscribeFromTokenRefreshListener();
 
     if (Platform.OS == 'android') {
@@ -139,7 +130,6 @@ export default class App extends Component<Props> {
 
     if (Platform.OS == 'ios') {
       this.unsubscribeFromNotificationListener();
-      this.unsubscribeFromNotificationDisplayedListener();
       this.unsubscribeFromNotificationOpenedListener();
     }
   }
@@ -175,26 +165,43 @@ export default class App extends Component<Props> {
   }
 
   registerCheckIn() {
+    // In this SDK version, this address map is used only on iOS, 
+    // Android will ignore this parameter
+    var address = {
+      locale: "pt-BR",
+      countryName: "Brasil",
+      countryCode: "BR",
+      adminArea: "Pernambuco",
+      subAdminArea: "Recife",
+      locality: "Recife",
+      subLocality: "Pina",
+      thoroughfare: "Av. Engenheiro Antônio de Goes",
+      subThoroughfare: 300,
+      postalCode: "51110-100",
+      latitude: -8.088109,
+      longitude: -34.883838
+    }
+
     InLocoEngage.registerCheckIn("FakePlace", "fakeplaceid", {
       "custom_key_1": "custom_value_1",
       "custom_key_2": "custom_value_2"
-    })
+    }, address)
   }
 
   setUserAddress() {
     InLocoEngage.setUserAddress({
-      "locale": "pt-BR",
-      "countryName": "Brasil",
-      "countryCode": "BR",
-      "adminArea": "Pernambuco",
-      "subAdminArea": "Recife",
-      "locality": "Recife",
-      "subLocality": "Pina",
-      "thoroughfare": "Av. Engenheiro Antônio de Goes",
-      "subThoroughfare": 300,
-      "postalCode": "51110-100",
-      "latitude": -8.088109,
-      "longitude": -34.883838
+      locale: "pt-BR",
+      countryName: "Brasil",
+      countryCode: "BR",
+      adminArea: "Pernambuco",
+      subAdminArea: "Recife",
+      locality: "Recife",
+      subLocality: "Pina",
+      thoroughfare: "Av. Engenheiro Antônio de Goes",
+      subThoroughfare: 300,
+      postalCode: "51110-100",
+      latitude: -8.088109,
+      longitude: -34.883838
     });
   }
 
@@ -202,60 +209,120 @@ export default class App extends Component<Props> {
     InLocoEngage.clearUserAddress();
   }
 
-  giveUserPrivacyConsent() {
-    InLocoEngage.giveUserPrivacyConsent(true);
+  requestPrivacyConsent() {
+    InLocoEngage.requestPrivacyConsent({
+        consentDialogTitle : "title text", 
+        consentDialogMessage: "message text", 
+        consentDialogAcceptText: "accept text", 
+        consentDialogDenyText: "deny text" 
+      },[
+        InLocoEngage.CONSENT_TYPES.ADDRESS_VALIDATION,
+        InLocoEngage.CONSENT_TYPES.CONTEXT_PROVIDER,
+        InLocoEngage.CONSENT_TYPES.ENGAGE, 
+        InLocoEngage.CONSENT_TYPES.EVENTS,
+        InLocoEngage.CONSENT_TYPES.LOCATION,
+      ]);
+      // It's possible to add a promise to retreive the consent result:
+      /* .then((data) => {
+        console.log("InLocoEngage - hasFinished: " + data.hasFinished);
+        console.log("InLocoEngage - isWaitingConsent: " + data.isWaitingConsent);
+        console.log("InLocoEngage - areAllConsentTypesGiven: " + data.areAllConsentTypesGiven);
+      }); */
   }
-
-  revokeUserPrivacyConsent() {
-    InLocoEngage.giveUserPrivacyConsent(false);
-  }
-
-  isWaitingPrivacyConsent() {
-    InLocoEngage.isWaitingUserPrivacyConsent().then((isWaiting) => {
-      alert(isWaiting);
+  
+  checkConsent() {
+    InLocoEngage.checkConsent([
+      InLocoEngage.CONSENT_TYPES.ADDRESS_VALIDATION,
+      InLocoEngage.CONSENT_TYPES.CONTEXT_PROVIDER,
+      InLocoEngage.CONSENT_TYPES.ENGAGE, 
+      InLocoEngage.CONSENT_TYPES.EVENTS,
+      InLocoEngage.CONSENT_TYPES.LOCATION,
+    ]).then((data) => {
+      var hasFinished = "hasFinished: " + data.hasFinished + "\n";
+      var isWaitingConsent = "isWaitingConsent: " + data.isWaitingConsent + "\n";
+      var areAllConsentTypesGiven = "areAllConsentTypesGiven: " + data.areAllConsentTypesGiven;
+      alert(hasFinished + isWaitingConsent + areAllConsentTypesGiven);
     });
+  }
+
+  allowConsentTypes() {
+    InLocoEngage.allowConsentTypes([
+      InLocoEngage.CONSENT_TYPES.ADDRESS_VALIDATION,
+      InLocoEngage.CONSENT_TYPES.CONTEXT_PROVIDER,
+      InLocoEngage.CONSENT_TYPES.ENGAGE, 
+      InLocoEngage.CONSENT_TYPES.EVENTS,
+      InLocoEngage.CONSENT_TYPES.LOCATION,
+    ]);
+  }
+
+  setAllowedConsentTypes() {
+    InLocoEngage.setAllowedConsentTypes([
+      InLocoEngage.CONSENT_TYPES.ADDRESS_VALIDATION,
+      InLocoEngage.CONSENT_TYPES.CONTEXT_PROVIDER,
+      InLocoEngage.CONSENT_TYPES.ENGAGE, 
+      InLocoEngage.CONSENT_TYPES.EVENTS,
+      InLocoEngage.CONSENT_TYPES.LOCATION,
+    ]);
+  }
+
+  denyConsentTypes() {
+    InLocoEngage.denyConsentTypes([
+      InLocoEngage.CONSENT_TYPES.ADDRESS_VALIDATION,
+      InLocoEngage.CONSENT_TYPES.CONTEXT_PROVIDER,
+      InLocoEngage.CONSENT_TYPES.ENGAGE, 
+      InLocoEngage.CONSENT_TYPES.EVENTS,
+      InLocoEngage.CONSENT_TYPES.LOCATION,
+    ]);
   }
 
   render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.buttonContainer}>
-          <Button color="#80BA40" title="Set user" onPress={() => this.setUser()}></Button>
-        </View>
-        <View style={styles.buttonContainer}>
-          <Button color="#80BA40" title="Clear user" onPress={() => this.clearUser()}></Button>
-        </View>
-        <View style={styles.buttonContainer}>
-          <Button color="#80BA40" title="Enable notifications" onPress={() => this.enableNotifications()}></Button>
-        </View>
-        <View style={styles.buttonContainer}>
-          <Button color="#80BA40" title="Disable notifications" onPress={() => this.disableNotifications()}></Button>
-        </View>
-        <View style={styles.buttonContainer}>
-          <Button color="#80BA40" title="Register custom event" onPress={() => this.registerCustomEvent()}></Button>
-        </View>
-        <View style={styles.buttonContainer}>
-          <Button color="#80BA40" title="Register localized event" onPress={() => this.registerLocalizedCustomEvent()}></Button>
-        </View>
-        <View style={styles.buttonContainer}>
-          <Button color="#80BA40" title="Register check-in" onPress={() => this.registerCheckIn()}></Button>
-        </View>
-        <View style={styles.buttonContainer}>
-          <Button color="#80BA40" title="Set user address" onPress={() => this.setUserAddress()}></Button>
-        </View>
-        <View style={styles.buttonContainer}>
-          <Button color="#80BA40" title="Clear user address" onPress={() => this.clearUserAddress()}></Button>
-        </View>
-        <View style={styles.buttonContainer}>
-          <Button color="#80BA40" title="Give privacy consent" onPress={() => this.giveUserPrivacyConsent()}></Button>
-        </View>
-        <View style={styles.buttonContainer}>
-          <Button color="#80BA40" title="Revoke privacy consent" onPress={() => this.revokeUserPrivacyConsent()}></Button>
-        </View>
-        <View style={styles.buttonContainer}>
-          <Button color="#80BA40" title="Is waiting privacy consent?" onPress={() => this.isWaitingPrivacyConsent()}></Button>
-        </View>
-      </View>
+      <SafeAreaView style={styles.container}>
+        <ScrollView>
+          <View style={styles.buttonContainer}>
+            <Button color="#80BA40" title="Set user" onPress={() => this.setUser()}></Button>
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button color="#80BA40" title="Clear user" onPress={() => this.clearUser()}></Button>
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button color="#80BA40" title="Enable notifications" onPress={() => this.enableNotifications()}></Button>
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button color="#80BA40" title="Disable notifications" onPress={() => this.disableNotifications()}></Button>
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button color="#80BA40" title="Register custom event" onPress={() => this.registerCustomEvent()}></Button>
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button color="#80BA40" title="Register localized event" onPress={() => this.registerLocalizedCustomEvent()}></Button>
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button color="#80BA40" title="Register check-in" onPress={() => this.registerCheckIn()}></Button>
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button color="#80BA40" title="Set user address" onPress={() => this.setUserAddress()}></Button>
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button color="#80BA40" title="Clear user address" onPress={() => this.clearUserAddress()}></Button>
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button color="#80BA40" title="Request Privacy Consent Dialog" onPress={() => this.requestPrivacyConsent()}></Button>
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button color="#80BA40" title="Check Consent" onPress={() => this.checkConsent()}></Button>
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button color="#80BA40" title="Allow Consent Types" onPress={() => this.allowConsentTypes()}></Button>
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button color="#80BA40" title="Set Allowed Consent Types" onPress={() => this.setAllowedConsentTypes()}></Button>
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button color="#80BA40" title="Deny Consent Types" onPress={() => this.denyConsentTypes()}></Button>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
     );
   }
 }
