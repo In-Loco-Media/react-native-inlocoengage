@@ -1,3 +1,7 @@
+Release 5.2.1
+===
+- Updates In Loco SDK version to 5.2.2 on iOS
+
 Release 5.2.0
 ===
 - Exposes track localized event method on iOS
