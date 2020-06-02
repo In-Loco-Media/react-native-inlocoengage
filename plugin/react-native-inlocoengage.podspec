@@ -16,6 +16,6 @@ Pod::Spec.new do |s|
   s.source_files  = "ios/**/*.{h,m}"
 
   s.dependency 'React'
-  s.dependency 'InLocoEngage-iOS-SDK', '~> 5.2.1'
+  s.dependency 'InLocoEngage-iOS-SDK', '~> 5.2.2'
   s.swift_version = "4.2"
 end
