@@ -93,11 +93,11 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (6.5.2):
     - GoogleUtilities/Logger
-  - InLoco-iOS-SDK (5.2.1):
-    - InLocoCommon-iOS-SDK (= 5.2.1)
-  - InLocoCommon-iOS-SDK (5.2.1)
-  - InLocoEngage-iOS-SDK (5.2.1):
-    - InLoco-iOS-SDK (= 5.2.1)
+  - InLoco-iOS-SDK (5.2.2):
+    - InLocoCommon-iOS-SDK (= 5.2.2)
+  - InLocoCommon-iOS-SDK (5.2.2)
+  - InLocoEngage-iOS-SDK (5.2.2):
+    - InLoco-iOS-SDK (= 5.2.2)
   - nanopb (0.3.9011):
     - nanopb/decode (= 0.3.9011)
     - nanopb/encode (= 0.3.9011)
@@ -273,7 +273,7 @@ PODS:
     - React-cxxreact (= 0.61.3)
     - React-jsi (= 0.61.3)
   - React-jsinspector (0.61.3)
-  - react-native-inlocoengage (5.1.0):
+  - react-native-inlocoengage (5.2.0):
     - InLocoEngage-iOS-SDK (~> 5.2.1)
     - React
   - React-RCTActionSheet (0.61.3):
@@ -331,7 +331,7 @@ DEPENDENCIES:
   - Firebase/Messaging (~> 6.11.0)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - InLocoEngage-iOS-SDK (~> 5.2.1)
+  - InLocoEngage-iOS-SDK (~> 5.2.2)
   - Permission-LocationAlways (from `../node_modules/react-native-permissions/ios/LocationAlways.podspec`)
   - Permission-LocationWhenInUse (from `../node_modules/react-native-permissions/ios/LocationWhenInUse.podspec`)
   - Permission-Notifications (from `../node_modules/react-native-permissions/ios/Notifications.podspec`)
@@ -346,7 +346,7 @@ DEPENDENCIES:
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
-  - react-native-inlocoengage (from `../../plugin`)
+  - react-native-inlocoengage (from `../node_modules/react-native-inlocoengage`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
   - React-RCTBlob (from `../node_modules/react-native/Libraries/Blob`)
@@ -421,7 +421,7 @@ EXTERNAL SOURCES:
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-inlocoengage:
-    :path: "../../plugin"
+    :path: "../node_modules/react-native-inlocoengage"
   React-RCTActionSheet:
     :path: "../node_modules/react-native/Libraries/ActionSheetIOS"
   React-RCTAnimation:
@@ -470,9 +470,9 @@ SPEC CHECKSUMS:
   GoogleDataTransport: b29a21d813e906014ca16c00897827e40e4a24ab
   GoogleDataTransportCCTSupport: 6f15a89b0ca35d6fa523e1f752ef818588885988
   GoogleUtilities: ad0f3b691c67909d03a3327cc205222ab8f42e0e
-  InLoco-iOS-SDK: 46c9a8bc14344074f0e4669ebbc2d0cdeba7a398
-  InLocoCommon-iOS-SDK: 1bf954de260753a6706e1a347e1431036ff1ed6d
-  InLocoEngage-iOS-SDK: 49d23e42b92f0182b8ab141f8a36cd5ad7670011
+  InLoco-iOS-SDK: 646ed54717691d5a42147de97870f879e29e9e07
+  InLocoCommon-iOS-SDK: b27519d06d4f2d718070f2eb1394e7c1dfc9331f
+  InLocoEngage-iOS-SDK: dc28a4769847ed2e449dd3fd553535b3d400489d
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
   Permission-LocationAlways: 781e472b8235fb8b6d2e947b2e4d6cce2c0343c9
   Permission-LocationWhenInUse: 5cb8e0df1463dfab567d2a3d2589ab557fda68cb
@@ -487,7 +487,7 @@ SPEC CHECKSUMS:
   React-jsi: 8bcf5836caa8a759c135ab9ef97f3e023a7b94af
   React-jsiexecutor: ae078e9df9c65bcdcf68f9a17656657932d95528
   React-jsinspector: a8939cc6909607eb5e8a5ecfff7c6226984e174d
-  react-native-inlocoengage: ec7e77090e0c1d50db1b3a761e7ef65b0b0e25a6
+  react-native-inlocoengage: 0ae4f956b20dc99b882b7861ad8e66d7c61c3e08
   React-RCTActionSheet: 94671eef55b01a93be735605822ef712d5ea208e
   React-RCTAnimation: 524ae33e73de9c0fe6501a7a4bda8e01d26499d9
   React-RCTBlob: 5481c2db702f57207af7e7a9b32d90524b821b72
@@ -502,6 +502,6 @@ SPEC CHECKSUMS:
   RNPermissions: 9e437a90de84a5402ff689d4da233730b81556c2
   Yoga: 02036f6383c0008edb7ef0773a0e6beb6ce82bd1
 
-PODFILE CHECKSUM: d5feffd2cbdb72e84f5e61d60a27dd441fcbbd91
+PODFILE CHECKSUM: f536ca19772d10c533b65def25a40639f054b253
 
-COCOAPODS: 1.9.0
+COCOAPODS: 1.8.4
