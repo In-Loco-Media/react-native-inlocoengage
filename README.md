@@ -32,7 +32,7 @@ Check our [changelog].
             yarn install
             ```
             - Change the sdk version at `example/ios/Podfile` and execute `pod install --repo-update`
-            - Run the android an iOS example app
+            - Run the android and iOS example app
     - Make the PR with the modifications and wait for the approval
     - Create and Push the new version tag with the updated master
 
