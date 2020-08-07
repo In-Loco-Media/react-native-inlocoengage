@@ -19,7 +19,7 @@ Check our [changelog].
 
 - Preparation
     - Update Master
-        - Change the version at `plugin/package.json` `plugin/package.json` `plugin/react-native-inlocoengage.podspec` and `plugin/android/build.gradle`
+        - Change the version at `plugin/package.json`, `plugin/package.json`, `plugin/react-native-inlocoengage.podspec` and `plugin/android/build.gradle`
         - Test the plugin new version
             - Link the new plugin locally to update the example app
 
