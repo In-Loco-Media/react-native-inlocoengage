@@ -16,7 +16,6 @@ Check our [changelog].
 
 ### Publishing Plugin Releases
 
-
 - Preparation
     - Update Master
         - Change the version at `plugin/package.json`, `plugin/package.json`, `plugin/react-native-inlocoengage.podspec` and `plugin/android/build.gradle`
@@ -50,7 +49,7 @@ Check our [changelog].
     npm pack
     ```
 
-    After doing that, check if the generated pack is Ok and deleted
+    After doing that, **check if the generated pack is Ok and deleted**
 
     - Login to the npm (you have to be included to the Inloco organization at npm to make the publish, so certificate that you already have the access)
 
