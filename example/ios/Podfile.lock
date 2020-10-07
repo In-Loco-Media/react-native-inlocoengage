@@ -94,11 +94,11 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (6.7.1):
     - GoogleUtilities/Logger
-  - InLoco-iOS-SDK (5.4.0):
-    - InLocoCommon-iOS-SDK (= 5.4.0)
-  - InLocoCommon-iOS-SDK (5.4.0)
-  - InLocoEngage-iOS-SDK (5.4.0):
-    - InLoco-iOS-SDK (= 5.4.0)
+  - InLoco-iOS-SDK (5.4.2):
+    - InLocoCommon-iOS-SDK (= 5.4.2)
+  - InLocoCommon-iOS-SDK (5.4.2)
+  - InLocoEngage-iOS-SDK (5.4.2):
+    - InLoco-iOS-SDK (= 5.4.2)
   - nanopb (0.3.9011):
     - nanopb/decode (= 0.3.9011)
     - nanopb/encode (= 0.3.9011)
@@ -275,8 +275,8 @@ PODS:
     - React-cxxreact (= 0.61.3)
     - React-jsi (= 0.61.3)
   - React-jsinspector (0.61.3)
-  - react-native-inlocoengage (5.4.0):
-    - InLocoEngage-iOS-SDK (~> 5.4.0)
+  - react-native-inlocoengage (5.4.1):
+    - InLocoEngage-iOS-SDK (~> 5.4.2)
     - React
   - React-RCTActionSheet (0.61.3):
     - React-Core/RCTActionSheetHeaders (= 0.61.3)
@@ -333,7 +333,7 @@ DEPENDENCIES:
   - Firebase/Messaging (~> 6.11.0)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - InLocoEngage-iOS-SDK (~> 5.4.0)
+  - InLocoEngage-iOS-SDK (~> 5.4.2)
   - Permission-LocationAlways (from `../node_modules/react-native-permissions/ios/LocationAlways.podspec`)
   - Permission-LocationWhenInUse (from `../node_modules/react-native-permissions/ios/LocationWhenInUse.podspec`)
   - Permission-Notifications (from `../node_modules/react-native-permissions/ios/Notifications.podspec`)
@@ -454,9 +454,9 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
-  Crashlytics: 540b7e5f5da5a042647227a5e3ac51d85eed06df
+  Crashlytics: 9220f5bc89e7a618df411b4f639389dbfb0e03d2
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
-  Fabric: 706c8b8098fff96c33c0db69cbf81f9c551d0d74
+  Fabric: ea977e3cd9c20425516d3dafd3bf8c941c51223f
   FBLazyVector: 5bc5b1606fc9a7ac6956de049f6e30901ed31c49
   FBReactNativeSpec: f7be9bcc5ce259f7c39509f3f4caf59020d11d4c
   Firebase: bc9cfc7a96c73268656d5aaab453ff1b4b530e0e
@@ -473,9 +473,9 @@ SPEC CHECKSUMS:
   GoogleDataTransport: 9a8a16f79feffc7f42096743de2a7c4815e84020
   GoogleDataTransportCCTSupport: 0f39025e8cf51f168711bd3fb773938d7e62ddb5
   GoogleUtilities: e121a3867449ce16b0e35ddf1797ea7a389ffdf2
-  InLoco-iOS-SDK: b06d04cc432066d66fca539f4994e4ff494724a3
-  InLocoCommon-iOS-SDK: ad20ddfbd41276ee045fd191db9ba7a636a42853
-  InLocoEngage-iOS-SDK: 8f75454577efb49595f94be4227ae59cf2ac5606
+  InLoco-iOS-SDK: 5941c64380a75a21d4387d4e5381569a5f835127
+  InLocoCommon-iOS-SDK: f6cd6bdc0de720be34ee29f44564135a62a8b684
+  InLocoEngage-iOS-SDK: 02def8623e3b77c0306b280692eef94806b62748
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
   Permission-LocationAlways: 781e472b8235fb8b6d2e947b2e4d6cce2c0343c9
   Permission-LocationWhenInUse: 5cb8e0df1463dfab567d2a3d2589ab557fda68cb
@@ -491,7 +491,7 @@ SPEC CHECKSUMS:
   React-jsi: 8bcf5836caa8a759c135ab9ef97f3e023a7b94af
   React-jsiexecutor: ae078e9df9c65bcdcf68f9a17656657932d95528
   React-jsinspector: a8939cc6909607eb5e8a5ecfff7c6226984e174d
-  react-native-inlocoengage: 19d8d249097ff6713684aab021a95feed8876b31
+  react-native-inlocoengage: 208b2ad84137e45435a0d2bc54ed73b28779d531
   React-RCTActionSheet: 94671eef55b01a93be735605822ef712d5ea208e
   React-RCTAnimation: 524ae33e73de9c0fe6501a7a4bda8e01d26499d9
   React-RCTBlob: 5481c2db702f57207af7e7a9b32d90524b821b72
@@ -506,6 +506,6 @@ SPEC CHECKSUMS:
   RNPermissions: 9e437a90de84a5402ff689d4da233730b81556c2
   Yoga: 02036f6383c0008edb7ef0773a0e6beb6ce82bd1
 
-PODFILE CHECKSUM: 120d8a0345242327441f699a9758aad5afe1039e
+PODFILE CHECKSUM: 3ee2bdd939edc8e8e9d1899c7f12e924bf27f28b
 
 COCOAPODS: 1.9.3
