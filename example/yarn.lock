@@ -5226,10 +5226,10 @@ react-native-firebase@5.5.6:
     opencollective-postinstall "^2.0.0"
     prop-types "^15.7.2"
 
-react-native-inlocoengage@4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/react-native-inlocoengage/-/react-native-inlocoengage-4.0.0.tgz#9808def8e1a4f18deb1bbd6324ad10f4ecdf2b6e"
-  integrity sha512-BF0DEDmUEzIugIikQHG+gFlWyUygAHxMuvrbXbvxOMypeZiyQHV747LT1TAtmrvUdrbNsgkuqWeG+28DmDFb5A==
+react-native-inlocoengage@^5.4.1:
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/react-native-inlocoengage/-/react-native-inlocoengage-5.4.0.tgz#ee3cdb8e70a681a6095b7f80ae71ce4431a18370"
+  integrity sha512-+LB/WpaQgupoMWazQZhRBhjXW57ClCTItRFoZ+WQLzukHaBkrSVgkKbvSt9fvZ8VbJoVOhI9acoTci6VTSZjHw==
 
 react-native-permissions@^2.0.3:
   version "2.0.3"
