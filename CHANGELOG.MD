@@ -1,3 +1,7 @@
+Release 5.4.2
+===
+- Updates In Loco SDK version to 5.4.3 on iOS
+
 Release 5.4.1
 ===
 - Updates In Loco SDK version to 5.4.2 on Android and iOS
