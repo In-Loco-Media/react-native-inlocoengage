@@ -1,3 +1,8 @@
+Release 5.5.1
+===
+- Updates In Loco SDK version to 5.5.2 on iOS
+- Includes SDK public headers on iOS
+
 Release 5.5.0
 ===
 - Updates In Loco SDK version to 5.5.+ on Android and 5.5.1 on iOS

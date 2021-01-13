@@ -27,8 +27,6 @@
 #define ADDRESS_LONGITUDE_KEY @"longitude"
 #define ADDRESS_LINE_KEY @"addressLine"
 
-@import InLocoSDK;
-
 @implementation RNInLocoEngage
 
 RCT_EXPORT_MODULE();

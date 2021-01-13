@@ -24,6 +24,29 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libRNInLocoEngage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNInLocoEngage.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		7942E45625AF82C100FECDCC /* ILMInLocoPush.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ILMInLocoPush.h; sourceTree = "<group>"; };
+		7942E45725AF82C100FECDCC /* ILMFirebaseProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ILMFirebaseProvider.h; sourceTree = "<group>"; };
+		7942E45825AF82C100FECDCC /* ILMInLocoVisits.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ILMInLocoVisits.h; sourceTree = "<group>"; };
+		7942E45925AF82C100FECDCC /* ILMConsentDialogOptions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ILMConsentDialogOptions.h; sourceTree = "<group>"; };
+		7942E45A25AF82C100FECDCC /* InLoco.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InLoco.h; sourceTree = "<group>"; };
+		7942E45B25AF82C100FECDCC /* ILMConsentResult.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ILMConsentResult.h; sourceTree = "<group>"; };
+		7942E45C25AF82C100FECDCC /* InLocoEngage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InLocoEngage.h; sourceTree = "<group>"; };
+		7942E45D25AF82C200FECDCC /* ILMCheckIn.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ILMCheckIn.h; sourceTree = "<group>"; };
+		7942E45E25AF82C200FECDCC /* ILMPushProviders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ILMPushProviders.h; sourceTree = "<group>"; };
+		7942E45F25AF82C200FECDCC /* ILMAirshipProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ILMAirshipProvider.h; sourceTree = "<group>"; };
+		7942E46025AF82C200FECDCC /* ILMInLoco.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ILMInLoco.h; sourceTree = "<group>"; };
+		7942E46125AF82C200FECDCC /* ILMError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ILMError.h; sourceTree = "<group>"; };
+		7942E46225AF82C200FECDCC /* ILMOptions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ILMOptions.h; sourceTree = "<group>"; };
+		7942E46325AF82C200FECDCC /* InLocoLocation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InLocoLocation.h; sourceTree = "<group>"; };
+		7942E46425AF82C200FECDCC /* ILMInLocoAddressValidation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ILMInLocoAddressValidation.h; sourceTree = "<group>"; };
+		7942E46525AF82C200FECDCC /* ILMInLocoEvents.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ILMInLocoEvents.h; sourceTree = "<group>"; };
+		7942E46625AF82C200FECDCC /* ILMAuthenticationRegisterDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ILMAuthenticationRegisterDelegate.h; sourceTree = "<group>"; };
+		7942E46725AF82C200FECDCC /* ILMConsentTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ILMConsentTypes.h; sourceTree = "<group>"; };
+		7942E46825AF82C200FECDCC /* ILMPushMessage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ILMPushMessage.h; sourceTree = "<group>"; };
+		7942E46925AF82C300FECDCC /* ILMUserAddress.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ILMUserAddress.h; sourceTree = "<group>"; };
+		7942E46A25AF82C300FECDCC /* ILMLocationModules.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ILMLocationModules.h; sourceTree = "<group>"; };
+		7942E46B25AF82C300FECDCC /* InLocoCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InLocoCore.h; sourceTree = "<group>"; };
+		7942E46C25AF82C300FECDCC /* ILMPushProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ILMPushProvider.h; sourceTree = "<group>"; };
 		B3E7B5881CC2AC0600A0062D /* RNInLocoEngage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNInLocoEngage.h; sourceTree = "<group>"; };
 		B3E7B5891CC2AC0600A0062D /* RNInLocoEngage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNInLocoEngage.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -52,6 +75,29 @@
 			children = (
 				B3E7B5881CC2AC0600A0062D /* RNInLocoEngage.h */,
 				B3E7B5891CC2AC0600A0062D /* RNInLocoEngage.m */,
+				7942E45F25AF82C200FECDCC /* ILMAirshipProvider.h */,
+				7942E46625AF82C200FECDCC /* ILMAuthenticationRegisterDelegate.h */,
+				7942E45D25AF82C200FECDCC /* ILMCheckIn.h */,
+				7942E45925AF82C100FECDCC /* ILMConsentDialogOptions.h */,
+				7942E45B25AF82C100FECDCC /* ILMConsentResult.h */,
+				7942E46725AF82C200FECDCC /* ILMConsentTypes.h */,
+				7942E46125AF82C200FECDCC /* ILMError.h */,
+				7942E45725AF82C100FECDCC /* ILMFirebaseProvider.h */,
+				7942E46025AF82C200FECDCC /* ILMInLoco.h */,
+				7942E46425AF82C200FECDCC /* ILMInLocoAddressValidation.h */,
+				7942E46525AF82C200FECDCC /* ILMInLocoEvents.h */,
+				7942E45625AF82C100FECDCC /* ILMInLocoPush.h */,
+				7942E45825AF82C100FECDCC /* ILMInLocoVisits.h */,
+				7942E46A25AF82C300FECDCC /* ILMLocationModules.h */,
+				7942E46225AF82C200FECDCC /* ILMOptions.h */,
+				7942E46825AF82C200FECDCC /* ILMPushMessage.h */,
+				7942E46C25AF82C300FECDCC /* ILMPushProvider.h */,
+				7942E45E25AF82C200FECDCC /* ILMPushProviders.h */,
+				7942E46925AF82C300FECDCC /* ILMUserAddress.h */,
+				7942E45A25AF82C100FECDCC /* InLoco.h */,
+				7942E46B25AF82C300FECDCC /* InLocoCore.h */,
+				7942E45C25AF82C100FECDCC /* InLocoEngage.h */,
+				7942E46325AF82C200FECDCC /* InLocoLocation.h */,
 				134814211AA4EA7D00B7C361 /* Products */,
 			);
 			sourceTree = "<group>";
