@@ -3084,9 +3084,9 @@ inherits@2, inherits@2.0.4, inherits@^2.0.3, inherits@~2.0.3:
   integrity sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==
 
 ini@~1.3.0:
-  version "1.3.5"
-  resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.5.tgz#eee25f56db1c9ec6085e0c22778083f596abf927"
-  integrity sha512-RZY5huIKCMRWDUqZlEi72f/lmXKMvuszcMBduliQ3nnWbx9X/ZBQO7DijMEYS9EhHBb2qacRUMtC7svLwe0lcw==
+  version "1.3.8"
+  resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.8.tgz#a29da425b48806f34767a4efce397269af28432c"
+  integrity sha512-JV/yugV2uzW5iMRSiZAyDtQd+nxtUnjeLt0acNdw98kKLrvuRVyB80tsREOE7yvGVgalhZ6RNXCmEHkUKBKxew==
 
 inquirer@^3.0.6:
   version "3.3.0"
@@ -5226,10 +5226,10 @@ react-native-firebase@5.5.6:
     opencollective-postinstall "^2.0.0"
     prop-types "^15.7.2"
 
-react-native-inlocoengage@^5.4.1:
-  version "5.4.0"
-  resolved "https://registry.yarnpkg.com/react-native-inlocoengage/-/react-native-inlocoengage-5.4.0.tgz#ee3cdb8e70a681a6095b7f80ae71ce4431a18370"
-  integrity sha512-+LB/WpaQgupoMWazQZhRBhjXW57ClCTItRFoZ+WQLzukHaBkrSVgkKbvSt9fvZ8VbJoVOhI9acoTci6VTSZjHw==
+react-native-inlocoengage@^5.5.0:
+  version "5.5.1"
+  resolved "https://registry.yarnpkg.com/react-native-inlocoengage/-/react-native-inlocoengage-5.5.1.tgz#7ee47e88d69ff1dd091b570a40de1ea3f40ec93b"
+  integrity sha512-EIO0iznhbwIqBwju5aL0tbqbXFxrXW3Uv9rnS0AVnvoV1T6DKtfoQdhKfsaD44ngv+KdASZkJc4oIFh60Siqhw==
 
 react-native-permissions@^2.0.3:
   version "2.0.3"
