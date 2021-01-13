@@ -4038,9 +4038,9 @@ lodash.unescape@4.0.1:
   integrity sha1-vyJJiGzlFM2hEvrpIYzcBlIR/Jw=
 
 lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.5, lodash@^4.3.0:
-  version "4.17.15"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
-  integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
+  version "4.17.20"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
+  integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
 
 log-symbols@^2.2.0:
   version "2.2.0"
@@ -5226,10 +5226,10 @@ react-native-firebase@5.5.6:
     opencollective-postinstall "^2.0.0"
     prop-types "^15.7.2"
 
-react-native-inlocoengage@^5.4.1:
-  version "5.4.0"
-  resolved "https://registry.yarnpkg.com/react-native-inlocoengage/-/react-native-inlocoengage-5.4.0.tgz#ee3cdb8e70a681a6095b7f80ae71ce4431a18370"
-  integrity sha512-+LB/WpaQgupoMWazQZhRBhjXW57ClCTItRFoZ+WQLzukHaBkrSVgkKbvSt9fvZ8VbJoVOhI9acoTci6VTSZjHw==
+react-native-inlocoengage@^5.5.0:
+  version "5.5.1"
+  resolved "https://registry.yarnpkg.com/react-native-inlocoengage/-/react-native-inlocoengage-5.5.1.tgz#7ee47e88d69ff1dd091b570a40de1ea3f40ec93b"
+  integrity sha512-EIO0iznhbwIqBwju5aL0tbqbXFxrXW3Uv9rnS0AVnvoV1T6DKtfoQdhKfsaD44ngv+KdASZkJc4oIFh60Siqhw==
 
 react-native-permissions@^2.0.3:
   version "2.0.3"
