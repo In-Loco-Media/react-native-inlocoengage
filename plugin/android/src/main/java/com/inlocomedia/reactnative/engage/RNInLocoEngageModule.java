@@ -14,6 +14,7 @@ import com.facebook.react.bridge.WritableMap;
 import com.inlocomedia.android.common.ConsentDialogOptions;
 import com.inlocomedia.android.common.ConsentResult;
 import com.inlocomedia.android.common.InLoco;
+import com.inlocomedia.android.common.InLocoDemo;
 import com.inlocomedia.android.common.InLocoEvents;
 import com.inlocomedia.android.common.InLocoOptions;
 import com.inlocomedia.android.common.listener.ConsentListener;
@@ -292,48 +293,62 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
         });
     }
 
+    @ReactMethod
+    public void trackSignUp(String signUpId, ReadableMap addressMap) {
+        Address address = convertMapToAddress(addressMap);
+        InLocoDemo.trackSignUp(reactContext, signUpId, address);
+    }
+
+    @ReactMethod
+    public void trackLogin(String accountId) {
+        InLocoDemo.trackLogin(reactContext, accountId);
+    }
+
     private static Address convertMapToAddress(ReadableMap map) {
-        Locale locale = localeFromString(map.getString(ADDRESS_LOCALE_KEY));
-        Address address = new Address(locale != null ? locale : new Locale("en", "US"));
+        if (map != null) {
+            Locale locale = localeFromString(map.getString(ADDRESS_LOCALE_KEY));
+            Address address = new Address(locale != null ? locale : new Locale("en", "US"));
 
-        if (map.hasKey(ADDRESS_COUNTRY_NAME_KEY)) {
-            address.setCountryName(map.getString(ADDRESS_COUNTRY_NAME_KEY));
-        }
-        if (map.hasKey(ADDRESS_COUNTRY_CODE_KEY)) {
-            address.setCountryCode(map.getString(ADDRESS_COUNTRY_CODE_KEY));
-        }
-        if (map.hasKey(ADDRESS_ADMIN_AREA_KEY)) {
-            address.setAdminArea(map.getString(ADDRESS_ADMIN_AREA_KEY));
-        }
-        if (map.hasKey(ADDRESS_SUBADMIN_AREA_KEY)) {
-            address.setSubAdminArea(map.getString(ADDRESS_SUBADMIN_AREA_KEY));
-        }
-        if (map.hasKey(ADDRESS_LOCALITY_KEY)) {
-            address.setLocality(map.getString(ADDRESS_LOCALITY_KEY));
-        }
-        if (map.hasKey(ADDRESS_SUB_LOCALITY_KEY)) {
-            address.setSubLocality(map.getString(ADDRESS_SUB_LOCALITY_KEY));
-        }
-        if (map.hasKey(ADDRESS_THOROUGHFARE_KEY)) {
-            address.setThoroughfare(map.getString(ADDRESS_THOROUGHFARE_KEY));
-        }
-        if (map.hasKey(ADDRESS_SUB_THOROUGHFARE_KEY)) {
-            address.setSubThoroughfare(map.getString(ADDRESS_SUB_THOROUGHFARE_KEY));
-        }
-        if (map.hasKey(ADDRESS_POSTAL_CODE_KEY)) {
-            address.setPostalCode(map.getString(ADDRESS_POSTAL_CODE_KEY));
-        }
-        if (map.hasKey(ADDRESS_LINE)) {
-            address.setAddressLine(0, map.getString(ADDRESS_LINE));
-        }
-        if (map.hasKey(ADDRESS_LATITUDE_KEY)) {
-            address.setLatitude(map.getDouble(ADDRESS_LATITUDE_KEY));
-        }
-        if (map.hasKey(ADDRESS_LONGITUDE_KEY)) {
-            address.setLongitude(map.getDouble(ADDRESS_LONGITUDE_KEY));
-        }
+            if (map.hasKey(ADDRESS_COUNTRY_NAME_KEY)) {
+                address.setCountryName(map.getString(ADDRESS_COUNTRY_NAME_KEY));
+            }
+            if (map.hasKey(ADDRESS_COUNTRY_CODE_KEY)) {
+                address.setCountryCode(map.getString(ADDRESS_COUNTRY_CODE_KEY));
+            }
+            if (map.hasKey(ADDRESS_ADMIN_AREA_KEY)) {
+                address.setAdminArea(map.getString(ADDRESS_ADMIN_AREA_KEY));
+            }
+            if (map.hasKey(ADDRESS_SUBADMIN_AREA_KEY)) {
+                address.setSubAdminArea(map.getString(ADDRESS_SUBADMIN_AREA_KEY));
+            }
+            if (map.hasKey(ADDRESS_LOCALITY_KEY)) {
+                address.setLocality(map.getString(ADDRESS_LOCALITY_KEY));
+            }
+            if (map.hasKey(ADDRESS_SUB_LOCALITY_KEY)) {
+                address.setSubLocality(map.getString(ADDRESS_SUB_LOCALITY_KEY));
+            }
+            if (map.hasKey(ADDRESS_THOROUGHFARE_KEY)) {
+                address.setThoroughfare(map.getString(ADDRESS_THOROUGHFARE_KEY));
+            }
+            if (map.hasKey(ADDRESS_SUB_THOROUGHFARE_KEY)) {
+                address.setSubThoroughfare(map.getString(ADDRESS_SUB_THOROUGHFARE_KEY));
+            }
+            if (map.hasKey(ADDRESS_POSTAL_CODE_KEY)) {
+                address.setPostalCode(map.getString(ADDRESS_POSTAL_CODE_KEY));
+            }
+            if (map.hasKey(ADDRESS_LINE)) {
+                address.setAddressLine(0, map.getString(ADDRESS_LINE));
+            }
+            if (map.hasKey(ADDRESS_LATITUDE_KEY)) {
+                address.setLatitude(map.getDouble(ADDRESS_LATITUDE_KEY));
+            }
+            if (map.hasKey(ADDRESS_LONGITUDE_KEY)) {
+                address.setLongitude(map.getDouble(ADDRESS_LONGITUDE_KEY));
+            }
 
-        return address;
+            return address;
+        }
+        return null;
     }
 
     private static Map<String, String> convertToStringStringMap(Map<String, Object> map) {

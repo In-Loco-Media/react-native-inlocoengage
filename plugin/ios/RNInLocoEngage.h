@@ -10,6 +10,7 @@
 #else
 #import "ILMInLoco.h"
 #import "ILMInLocoEvents.h"
+#import "ILMInLocoDemo.h"
 #endif
 
 #if __has_include(<InLocoSDKEngage/InLocoEngage.h>) // from Pod

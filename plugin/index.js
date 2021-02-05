@@ -183,6 +183,20 @@ const getInstallationId = () => {
 	return RNInLocoEngage.getInstallationId();
 }
 
+const trackSignUp = (signUpId, address) => {
+	if (address != null && "subThoroughfare" in address) {
+		address.subThoroughfare = String(address.subThoroughfare);
+	}
+	if (Platform.OS == 'ios' && address != null && "locale" in address) {
+		address.locale = address.locale.replace("-", "_");
+	}  
+	RNInLocoEngage.trackSignUp(signUpId, address);
+}
+
+const trackLogin = (accountId) => {
+	RNInLocoEngage.trackLogin(accountId);
+}
+
 export default {
 	init,
 	initWithOptions,
@@ -210,5 +224,7 @@ export default {
 	checkConsent,
 	denyConsentTypes,
 	getInstallationId,
+	trackSignUp,
+	trackLogin,
 	CONSENT_TYPES
 };

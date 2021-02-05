@@ -280,6 +280,14 @@ export default class App extends Component<Props> {
     });
   }
 
+  trackSignUp() {
+    InLocoEngage.trackSignUp("sample_signup_id");
+  }
+
+  trackLogin() {
+    InLocoEngage.trackLogin("sample_account_id");
+  }
+
   render() {
     return (
       <SafeAreaView style={styles.container}>
@@ -328,6 +336,12 @@ export default class App extends Component<Props> {
           </View>
           <View style={styles.buttonContainer}>
             <Button color="#80BA40" title="Get Installation Id" onPress={() => this.getInstallationId()}></Button>
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button color="#80BA40" title="Track signUp" onPress={() => this.trackSignUp()}></Button>
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button color="#80BA40" title="Track login" onPress={() => this.trackLogin()}></Button>
           </View>
         </ScrollView>
       </SafeAreaView>

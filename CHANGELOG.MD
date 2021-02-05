@@ -1,3 +1,8 @@
+Release 5.6.0
+===
+- Updates In Loco SDK version to 5.6.+ on Android and 5.6.1 on iOS
+- Exposes trackSignUp and trackLogin methods
+
 Release 5.5.1
 ===
 - Updates In Loco SDK version to 5.5.2 on iOS
