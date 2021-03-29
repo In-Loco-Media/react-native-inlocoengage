@@ -5226,10 +5226,10 @@ react-native-firebase@5.5.6:
     opencollective-postinstall "^2.0.0"
     prop-types "^15.7.2"
 
-react-native-inlocoengage@^5.5.0:
-  version "5.5.1"
-  resolved "https://registry.yarnpkg.com/react-native-inlocoengage/-/react-native-inlocoengage-5.5.1.tgz#7ee47e88d69ff1dd091b570a40de1ea3f40ec93b"
-  integrity sha512-EIO0iznhbwIqBwju5aL0tbqbXFxrXW3Uv9rnS0AVnvoV1T6DKtfoQdhKfsaD44ngv+KdASZkJc4oIFh60Siqhw==
+react-native-inlocoengage@^5.6.0:
+  version "5.6.0"
+  resolved "https://registry.yarnpkg.com/react-native-inlocoengage/-/react-native-inlocoengage-5.6.0.tgz#c29501a76b8563647692fa1c6be86d8f232ead1f"
+  integrity sha512-SfKnI5YuhAlmdyICGjDjWczkHjOP3Nw+fdolhsMZBD3DvRSom8RSzsxxCy0xMtCy4F0BYOt7t0eslco9byAgWA==
 
 react-native-permissions@^2.0.3:
   version "2.0.3"
@@ -6622,9 +6622,9 @@ xtend@~4.0.1:
   integrity sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==
 
 y18n@^3.2.1:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/y18n/-/y18n-3.2.1.tgz#6d15fba884c08679c0d77e88e7759e811e07fa41"
-  integrity sha1-bRX7qITAhnnA136I53WegR4H+kE=
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/y18n/-/y18n-3.2.2.tgz#85c901bd6470ce71fc4bb723ad209b70f7f28696"
+  integrity sha512-uGZHXkHnhF0XeeAPgnKfPv1bgKAYyVvmNL1xlKsPYZPaIHxGti2hHqvOCQv71XMsLxu1QjergkqogUnms5D3YQ==
 
 "y18n@^3.2.1 || ^4.0.0", y18n@^4.0.0:
   version "4.0.0"
