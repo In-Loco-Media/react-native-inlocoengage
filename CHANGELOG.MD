@@ -1,3 +1,8 @@
+Release 5.8.0
+===
+- Updates In Loco SDK version to 5.8.+
+- Exposes trackTransaction method
+
 Release 5.6.0
 ===
 - Updates In Loco SDK version to 5.6.+ on Android and 5.6.1 on iOS

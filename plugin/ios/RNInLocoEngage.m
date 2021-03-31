@@ -27,6 +27,8 @@
 #define ADDRESS_LONGITUDE_KEY                 @"longitude"
 #define ADDRESS_LINE_KEY                      @"addressLine"
 
+#define TRANSACTION_ADDRESS_TYPE              @"type"
+
 @implementation RNInLocoEngage
 
 RCT_EXPORT_MODULE();
@@ -37,6 +39,7 @@ RCT_EXPORT_METHOD(initSdk) {
 
 RCT_EXPORT_METHOD(initSdkWithOptions:(NSDictionary *)optionsDict) {
     ILMOptions *options = [[ILMOptions alloc] init];
+
     [options setApplicationId:[optionsDict objectForKey:OPTIONS_APP_ID]];
     [options setLogEnabled:[[optionsDict objectForKey:OPTIONS_LOGS_ENABLED] boolValue]];
     [options setDevelopmentDevices:[optionsDict objectForKey:OPTIONS_DEVELOPMENT_DEVICES]];
@@ -57,18 +60,23 @@ RCT_EXPORT_METHOD(clearUser) {
 
 RCT_EXPORT_METHOD(requestPrivacyConsent:(NSDictionary *)dialogOptionsDict withConsentTypes:(NSArray<NSString *> *)consentTypes withPromise:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     ILMConsentDialogOptions *dialogOptions = [[ILMConsentDialogOptions alloc] init];
+
     if ([dialogOptionsDict objectForKey:OPTIONS_CONSENT_DIALOG_TITLE]) {
         [dialogOptions setTitle:[dialogOptionsDict objectForKey:OPTIONS_CONSENT_DIALOG_TITLE]];
     }
+
     if ([dialogOptionsDict objectForKey:OPTIONS_CONSENT_DIALOG_MESSAGE]) {
         [dialogOptions setMessage:[dialogOptionsDict objectForKey:OPTIONS_CONSENT_DIALOG_MESSAGE]];
     }
+
     if ([dialogOptionsDict objectForKey:OPTIONS_CONSENT_DIALOG_ACCEPT_TEXT]) {
         [dialogOptions setAcceptText:[dialogOptionsDict objectForKey:OPTIONS_CONSENT_DIALOG_ACCEPT_TEXT]];
     }
+
     if ([dialogOptionsDict objectForKey:OPTIONS_CONSENT_DIALOG_DENY_TEXT]) {
         [dialogOptions setDenyText:[dialogOptionsDict objectForKey:OPTIONS_CONSENT_DIALOG_DENY_TEXT]];
     }
+
     [dialogOptions setConsentTypes:[NSSet setWithArray:consentTypes]];
 
     [ILMInLoco requestPrivacyConsentWithOptions:dialogOptions andConsentBlock:^(ILMConsentResult *result) {
@@ -76,6 +84,7 @@ RCT_EXPORT_METHOD(requestPrivacyConsent:(NSDictionary *)dialogOptionsDict withCo
         [dict setValue:@([result hasFinished]) forKey:@"hasFinished"];
         [dict setValue:@([result areAllConsentTypesGiven]) forKey:@"areAllConsentTypesGiven"];
         [dict setValue:@([result isWaitingConsent]) forKey:@"isWaitingConsent"];
+
         if (resolve) {
             resolve(dict);
         }
@@ -117,6 +126,7 @@ RCT_EXPORT_METHOD(checkConsent:(NSArray<NSString *> *)consentTypes withPromise:(
                               [dict setValue:@([result hasFinished]) forKey:@"hasFinished"];
                               [dict setValue:@([result areAllConsentTypesGiven]) forKey:@"areAllConsentTypesGiven"];
                               [dict setValue:@([result isWaitingConsent]) forKey:@"isWaitingConsent"];
+
                               if (resolve) {
                                   resolve(dict);
                               }
@@ -125,6 +135,7 @@ RCT_EXPORT_METHOD(checkConsent:(NSArray<NSString *> *)consentTypes withPromise:(
 
 RCT_EXPORT_METHOD(setUserAddress:(NSDictionary *)addressDict) {
     ILMUserAddress *userAddress = [self convertToUserAddress:addressDict];
+
     [ILMInLocoAddressValidation setUserAddress:userAddress];
 }
 
@@ -134,6 +145,7 @@ RCT_EXPORT_METHOD(clearUserAddress) {
 
 RCT_EXPORT_METHOD(setPushProvider:(NSString *)name andToken:(NSString *)token) {
     ILMPushProvider *pushProvider = [[ILMPushProvider alloc] initWithName:name token:token];
+
     [ILMInLocoPush setPushProvider:pushProvider];
 }
 
@@ -152,6 +164,7 @@ RCT_EXPORT_METHOD(trackLocalizedEvent:(NSString *)name properties:(NSDictionary 
 RCT_EXPORT_METHOD(registerCheckIn:(NSString *)placeName placeId:(NSString *)placeId properties:(NSDictionary *)properties address:(NSDictionary *)addressDict) {
     ILMUserAddress *userAddress = [self convertToUserAddress:addressDict];
     ILMCheckIn *checkin = [[ILMCheckIn alloc] init];
+
     [checkin setPlaceName:placeName];
     [checkin setPlaceId:placeId];
     [checkin setUserAddress:userAddress];
@@ -162,11 +175,13 @@ RCT_EXPORT_METHOD(registerCheckIn:(NSString *)placeName placeId:(NSString *)plac
 
 RCT_EXPORT_METHOD(didReceiveNotificationResponse:(NSDictionary *)userInfo) {
     ILMPushMessage *message = [[ILMPushMessage alloc] initWithDictionary:userInfo];
+
     [ILMInLocoPush didReceiveNotificationResponse:message];
 }
 
 RCT_EXPORT_METHOD(didReceiveNotificationResponse:(NSDictionary *)userInfo withPromise:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     ILMPushMessage *message = [[ILMPushMessage alloc] initWithDictionary:userInfo];
+
     [ILMInLocoPush didReceiveNotificationResponse:message completionBlock:^{
         resolve(nil);
     }];
@@ -174,6 +189,7 @@ RCT_EXPORT_METHOD(didReceiveNotificationResponse:(NSDictionary *)userInfo withPr
 
 RCT_EXPORT_METHOD(didFinishLaunchingWithMessage:(NSDictionary *)userInfo) {
     ILMPushMessage *message = [[ILMPushMessage alloc] initWithDictionary:userInfo];
+
     [ILMInLocoPush appDidFinishLaunchingWithMessage:message];
 }
 
@@ -189,11 +205,93 @@ RCT_EXPORT_METHOD(getInstallationId:(RCTPromiseResolveBlock)resolve rejecter:(RC
 
 RCT_EXPORT_METHOD(trackSignUp:(NSString *)signUpId address:(NSDictionary *)addressDict) {
     ILMUserAddress *userAddress = [self convertToUserAddress:addressDict];
+
     [ILMInLocoDemo trackSignUp:signUpId address:userAddress];
 }
 
-RCT_EXPORT_METHOD(trackLogin:(NSString *)accountId) {
-    [ILMInLocoDemo trackLogin:accountId];
+RCT_EXPORT_METHOD(trackLogin:(NSString *)accountId loginId:(NSString *)loginId) {
+    [ILMInLocoDemo trackLoginWithAccountId:accountId loginId:loginId];
+}
+
+RCT_EXPORT_METHOD(trackTransaction:(NSString *)accountId transactionId:(NSString *)transactionId transactionAddressesArr:(NSArray<NSDictionary *> *)transactionAddressesArr) {
+    NSMutableSet<ILMTransactionAddress *> *transactionAddresses = [[NSMutableSet alloc] init];
+
+    for (NSDictionary *transactionAddressDict in transactionAddressesArr) {
+        ILMTransactionAddress *transactinAddress = [self convertToTransactionAddress:transactionAddressDict];
+
+        if (transactinAddress != nil) {
+            [transactionAddresses addObject:transactinAddress];
+        }
+    }
+
+    [ILMInLocoDemo trackTransactionWithAccountId:accountId
+                                   transactionId:transactionId
+                            transactionAddresses:[transactionAddresses count] != 0 ? transactionAddresses : nil];
+}
+
+- (void)fillAddress:(ILMUserAddress *)userAddress addressDict:(NSDictionary *)addressDict
+{
+    if (addressDict == nil) {
+        return;
+    }
+
+    NSLocale *locale;
+
+    if ([addressDict objectForKey:ADDRESS_LOCALE_KEY]) {
+        locale = [[NSLocale alloc] initWithLocaleIdentifier:[addressDict objectForKey:ADDRESS_LOCALE_KEY]];
+    } else {
+        locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+    }
+
+    [userAddress setLocale:locale];
+
+    if ([addressDict objectForKey:ADDRESS_COUNTRY_NAME_KEY]) {
+        [userAddress setCountryName:[addressDict objectForKey:ADDRESS_COUNTRY_NAME_KEY]];
+    }
+
+    if ([addressDict objectForKey:ADDRESS_COUNTRY_CODE_KEY]) {
+        [userAddress setCountryCode:[addressDict objectForKey:ADDRESS_COUNTRY_CODE_KEY]];
+    }
+
+    if ([addressDict objectForKey:ADDRESS_ADMIN_AREA_KEY]) {
+        [userAddress setAdminArea:[addressDict objectForKey:ADDRESS_ADMIN_AREA_KEY]];
+    }
+
+    if ([addressDict objectForKey:ADDRESS_SUBADMIN_AREA_KEY]) {
+        [userAddress setSubAdminArea:[addressDict objectForKey:ADDRESS_SUBADMIN_AREA_KEY]];
+    }
+
+    if ([addressDict objectForKey:ADDRESS_LOCALITY_KEY]) {
+        [userAddress setLocality:[addressDict objectForKey:ADDRESS_LOCALITY_KEY]];
+    }
+
+    if ([addressDict objectForKey:ADDRESS_SUB_LOCALITY_KEY]) {
+        [userAddress setSubLocality:[addressDict objectForKey:ADDRESS_SUB_LOCALITY_KEY]];
+    }
+
+    if ([addressDict objectForKey:ADDRESS_THOROUGHFARE_KEY]) {
+        [userAddress setThoroughfare:[addressDict objectForKey:ADDRESS_THOROUGHFARE_KEY]];
+    }
+
+    if ([addressDict objectForKey:ADDRESS_SUB_THOROUGHFARE_KEY]) {
+        [userAddress setSubThoroughfare:[addressDict objectForKey:ADDRESS_SUB_THOROUGHFARE_KEY]];
+    }
+
+    if ([addressDict objectForKey:ADDRESS_POSTAL_CODE_KEY]) {
+        [userAddress setPostalCode:[addressDict objectForKey:ADDRESS_POSTAL_CODE_KEY]];
+    }
+
+    if ([addressDict objectForKey:ADDRESS_LATITUDE_KEY]) {
+        [userAddress setLatitude:[addressDict objectForKey:ADDRESS_LATITUDE_KEY]];
+    }
+
+    if ([addressDict objectForKey:ADDRESS_LONGITUDE_KEY]) {
+        [userAddress setLongitude:[addressDict objectForKey:ADDRESS_LONGITUDE_KEY]];
+    }
+
+    if ([addressDict objectForKey:ADDRESS_LINE_KEY]) {
+        [userAddress setAddressLine:[addressDict objectForKey:ADDRESS_LINE_KEY]];
+    }
 }
 
 - (ILMUserAddress *)convertToUserAddress:(NSDictionary *)addressDict
@@ -204,52 +302,23 @@ RCT_EXPORT_METHOD(trackLogin:(NSString *)accountId) {
 
     ILMUserAddress *userAddress = [[ILMUserAddress alloc] init];
 
-    NSLocale *locale;
-    if ([addressDict objectForKey:ADDRESS_LOCALE_KEY]) {
-        locale = [[NSLocale alloc] initWithLocaleIdentifier:[addressDict objectForKey:ADDRESS_LOCALE_KEY]];
-    } else {
-        locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
-    }
-    [userAddress setLocale:locale];
-
-    if ([addressDict objectForKey:ADDRESS_COUNTRY_NAME_KEY]) {
-        [userAddress setCountryName:[addressDict objectForKey:ADDRESS_COUNTRY_NAME_KEY]];
-    }
-    if ([addressDict objectForKey:ADDRESS_COUNTRY_CODE_KEY]) {
-        [userAddress setCountryCode:[addressDict objectForKey:ADDRESS_COUNTRY_CODE_KEY]];
-    }
-    if ([addressDict objectForKey:ADDRESS_ADMIN_AREA_KEY]) {
-        [userAddress setAdminArea:[addressDict objectForKey:ADDRESS_ADMIN_AREA_KEY]];
-    }
-    if ([addressDict objectForKey:ADDRESS_SUBADMIN_AREA_KEY]) {
-        [userAddress setSubAdminArea:[addressDict objectForKey:ADDRESS_SUBADMIN_AREA_KEY]];
-    }
-    if ([addressDict objectForKey:ADDRESS_LOCALITY_KEY]) {
-        [userAddress setLocality:[addressDict objectForKey:ADDRESS_LOCALITY_KEY]];
-    }
-    if ([addressDict objectForKey:ADDRESS_SUB_LOCALITY_KEY]) {
-        [userAddress setSubLocality:[addressDict objectForKey:ADDRESS_SUB_LOCALITY_KEY]];
-    }
-    if ([addressDict objectForKey:ADDRESS_THOROUGHFARE_KEY]) {
-        [userAddress setThoroughfare:[addressDict objectForKey:ADDRESS_THOROUGHFARE_KEY]];
-    }
-    if ([addressDict objectForKey:ADDRESS_SUB_THOROUGHFARE_KEY]) {
-        [userAddress setSubThoroughfare:[addressDict objectForKey:ADDRESS_SUB_THOROUGHFARE_KEY]];
-    }
-    if ([addressDict objectForKey:ADDRESS_POSTAL_CODE_KEY]) {
-        [userAddress setPostalCode:[addressDict objectForKey:ADDRESS_POSTAL_CODE_KEY]];
-    }
-    if ([addressDict objectForKey:ADDRESS_LATITUDE_KEY]) {
-        [userAddress setLatitude:[addressDict objectForKey:ADDRESS_LATITUDE_KEY]];
-    }
-    if ([addressDict objectForKey:ADDRESS_LONGITUDE_KEY]) {
-        [userAddress setLongitude:[addressDict objectForKey:ADDRESS_LONGITUDE_KEY]];
-    }
-    if ([addressDict objectForKey:ADDRESS_LINE_KEY]) {
-        [userAddress setAddressLine:[addressDict objectForKey:ADDRESS_LINE_KEY]];
-    }
+    [self fillAddress:userAddress addressDict:addressDict];
 
     return userAddress;
+}
+
+- (ILMTransactionAddress *)convertToTransactionAddress:(NSDictionary *)addressDict
+{
+    if (addressDict == nil) {
+        return nil;
+    }
+
+    NSString *transactionAddressType = [addressDict objectForKey:TRANSACTION_ADDRESS_TYPE] != nil ? [addressDict objectForKey:TRANSACTION_ADDRESS_TYPE] : nil;
+    ILMTransactionAddress *transactionAddress = [[ILMTransactionAddress alloc] initWithType:transactionAddressType];
+
+    [self fillAddress:transactionAddress addressDict:addressDict];
+
+    return transactionAddress;
 }
 
 @end

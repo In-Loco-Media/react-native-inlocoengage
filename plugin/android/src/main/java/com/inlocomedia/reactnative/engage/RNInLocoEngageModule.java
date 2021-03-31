@@ -1,7 +1,6 @@
 package com.inlocomedia.reactnative.engage;
 
 import android.location.Address;
-import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
@@ -17,6 +16,7 @@ import com.inlocomedia.android.common.InLoco;
 import com.inlocomedia.android.common.InLocoDemo;
 import com.inlocomedia.android.common.InLocoEvents;
 import com.inlocomedia.android.common.InLocoOptions;
+import com.inlocomedia.android.common.TransactionAddress;
 import com.inlocomedia.android.common.listener.ConsentListener;
 import com.inlocomedia.android.common.listener.InLocoListener;
 import com.inlocomedia.android.common.listener.Result;
@@ -50,6 +50,8 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
     private static String ADDRESS_LATITUDE_KEY = "latitude";
     private static String ADDRESS_LONGITUDE_KEY = "longitude";
     private static String ADDRESS_LINE = "address_line";
+
+    private static String TRANSACTION_ADDRESS_TYPE = "type";
 
     private static String OPTIONS_APP_ID = "appId";
     private static String OPTIONS_LOGS_ENABLED = "logsEnabled";
@@ -85,7 +87,7 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
         options.privacyConsentRequired(optionsMap.getBoolean(OPTIONS_REQUIRES_USER_PRIVACY_CONSENT));
         options.backgroundWakeupEnabled(optionsMap.getBoolean(OPTIONS_BACKGROUND_WAKEUP_ENABLED));
         options.screenTrackingEnabled(optionsMap.getBoolean(OPTIONS_SCREEN_TRACKING_ENABLED));
-        options.developmentDevices(convertReadableArrayToSet(optionsMap.getArray(OPTIONS_DEVELOPMENT_DEVICES)));
+        options.developmentDevices(convertStringReadableArrayToSet(optionsMap.getArray(OPTIONS_DEVELOPMENT_DEVICES)));
 
         InLoco.init(reactContext, options.build());
     }
@@ -115,7 +117,7 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
         if (consentDialogOptionsMap.hasKey(CONSENT_DIALOG_DENY_TEXT)) {
             consentDialogOptions.denyText(consentDialogOptionsMap.getString(CONSENT_DIALOG_DENY_TEXT));
         }
-        consentDialogOptions.consentTypes(convertReadableArrayToSet(consentTypesArray));
+        consentDialogOptions.consentTypes(convertStringReadableArrayToSet(consentTypesArray));
 
         InLoco.requestPrivacyConsent(consentDialogOptions.build(), new ConsentListener() {
             @Override
@@ -143,25 +145,25 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
     @ReactMethod
     @Deprecated
     public void giveUserPrivacyConsentForTypes(final ReadableArray consentTypesArray) {
-        Set<String> consentTypes = convertReadableArrayToSet(consentTypesArray);
+        Set<String> consentTypes = convertStringReadableArrayToSet(consentTypesArray);
         InLoco.givePrivacyConsent(reactContext, consentTypes);
     }
 
     @ReactMethod
     public void setAllowedConsentTypes(final ReadableArray consentTypesArray) {
-        Set<String> consentTypes = convertReadableArrayToSet(consentTypesArray);
+        Set<String> consentTypes = convertStringReadableArrayToSet(consentTypesArray);
         InLoco.setAllowedConsentTypes(reactContext, consentTypes);
     }
 
     @ReactMethod
     public void allowConsentTypes(final ReadableArray consentTypesArray) {
-        Set<String> consentTypes = convertReadableArrayToSet(consentTypesArray);
+        Set<String> consentTypes = convertStringReadableArrayToSet(consentTypesArray);
         InLoco.allowConsentTypes(reactContext, consentTypes);
     }
 
     @ReactMethod
     public void denyConsentTypes(final ReadableArray consentTypesArray) {
-        Set<String> consentTypes = convertReadableArrayToSet(consentTypesArray);
+        Set<String> consentTypes = convertStringReadableArrayToSet(consentTypesArray);
         InLoco.denyConsentTypes(reactContext, consentTypes);
     }
 
@@ -185,7 +187,7 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void checkConsent(final ReadableArray consentTypesArray, final Promise promise) {
-        Set<String> consentTypes = convertReadableArrayToSet(consentTypesArray);
+        Set<String> consentTypes = convertStringReadableArrayToSet(consentTypesArray);
         InLoco.checkConsent(reactContext, new ConsentListener() {
             @Override
             public void onConsentResult(final ConsentResult consentResult) {
@@ -300,8 +302,13 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void trackLogin(String accountId) {
-        InLocoDemo.trackLogin(reactContext, accountId);
+    public void trackLogin(String accountId, String loginId) {
+        InLocoDemo.trackLogin(reactContext, accountId, loginId);
+    }
+
+    @ReactMethod
+    public void trackTransaction(String transactionId, String accountId, ReadableArray addresses) {
+        InLocoDemo.trackTransaction(reactContext, accountId, transactionId, convertTransactionAddressReadableArrayToSet(addresses));
     }
 
     private static Address convertMapToAddress(ReadableMap map) {
@@ -351,6 +358,15 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
         return null;
     }
 
+    private static TransactionAddress convertMapToTransactionAddress(ReadableMap map) {
+        if (map != null) {
+            Address address = convertMapToAddress(map);
+            String addressType = map.hasKey(TRANSACTION_ADDRESS_TYPE) ? map.getString(TRANSACTION_ADDRESS_TYPE) : null;
+            return new TransactionAddress(addressType, address);
+        }
+        return null;
+    }
+
     private static Map<String, String> convertToStringStringMap(Map<String, Object> map) {
         Map<String, String> newMap = new HashMap<>();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
@@ -361,10 +377,21 @@ public class RNInLocoEngageModule extends ReactContextBaseJavaModule {
         return newMap;
     }
 
-    private static Set<String> convertReadableArrayToSet(ReadableArray array) {
+    private static Set<String> convertStringReadableArrayToSet(ReadableArray array) {
         Set<String> set = new HashSet<>();
         for (int i = 0; i < array.size(); i++) {
             set.add(array.getString(i));
+        }
+        return set;
+    }
+
+    private static Set<TransactionAddress> convertTransactionAddressReadableArrayToSet(ReadableArray array) {
+        Set<TransactionAddress> set = new HashSet<>();
+        for (int i = 0; i < array.size(); i++) {
+            TransactionAddress transactionAddress = convertMapToTransactionAddress(array.getMap(i));
+            if (transactionAddress != null) {
+                set.add(transactionAddress);
+            }
         }
         return set;
     }

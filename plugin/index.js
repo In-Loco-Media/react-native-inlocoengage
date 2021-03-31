@@ -26,6 +26,12 @@ const CONSENT_TYPES = {
 	NONE: []
 };
 
+const TRANSACTION_ADDRESS_TYPES = {
+	BILLING: "billing",
+  	SHIPPING: "shipping",
+  	HOME: "home"
+};
+
 const init = () => {
 	RNInLocoEngage.initSdk();
 }
@@ -73,14 +79,7 @@ const registerCheckIn = (placeName, placeId, properties, address) => {
 			properties[property] = properties[property].toString();
 		}
 	}
-	if (Platform.OS == 'android') {
-		RNInLocoEngage.registerCheckIn(placeName, placeId, properties);
-	} else if (Platform.OS == 'ios') {
-		if (address != null && "locale" in address)  {
-			address.locale = address.locale.replace("-", "_");
-		} 
-		RNInLocoEngage.registerCheckIn(placeName, placeId, properties, address);
-	}
+	RNInLocoEngage.registerCheckIn(placeName, placeId, properties, getProcessedAddress(address));
 }
  
 const setPushProvider = (provider) => {
@@ -134,13 +133,7 @@ const getUrl = (notification) => {
 }
 
 const setUserAddress = (address) => {
-	if (address != null && "subThoroughfare" in address) {
-		address.subThoroughfare = String(address.subThoroughfare);
-	}
-	if (Platform.OS == 'ios' && address != null && "locale" in address) {
-		address.locale = address.locale.replace("-", "_");
-	}  
-	RNInLocoEngage.setUserAddress(address);
+	RNInLocoEngage.setUserAddress(getProcessedAddress(address));
 }
 
 const clearUserAddress = () => {
@@ -184,17 +177,36 @@ const getInstallationId = () => {
 }
 
 const trackSignUp = (signUpId, address) => {
-	if (address != null && "subThoroughfare" in address) {
-		address.subThoroughfare = String(address.subThoroughfare);
-	}
-	if (Platform.OS == 'ios' && address != null && "locale" in address) {
-		address.locale = address.locale.replace("-", "_");
-	}  
-	RNInLocoEngage.trackSignUp(signUpId, address);
+	RNInLocoEngage.trackSignUp(signUpId, getProcessedAddress(address));
 }
 
-const trackLogin = (accountId) => {
-	RNInLocoEngage.trackLogin(accountId);
+const trackLogin = (accountId, loginId) => {
+	RNInLocoEngage.trackLogin(accountId, loginId);
+}
+
+const trackTransaction = (accountId, transactionId, transactionAddresses) => {
+	var processedTransactionAddresses;
+	if (transactionAddresses) {
+		processedTransactionAddresses = [];
+		processedTransactionAddresses = transactionAddresses.map(address => getProcessedAddress(address));
+	}
+	RNInLocoEngage.trackTransaction(accountId, transactionId, processedTransactionAddresses);
+}
+
+const getProcessedAddress = (address) => {
+	if (!address) return null; 
+
+	const processedAddress = Object.assign({}, address);
+	
+	if ("subThoroughfare" in processedAddress) {
+		processedAddress.subThoroughfare = String(processedAddress.subThoroughfare);
+	}
+	
+	if (Platform.OS == 'ios' && "locale" in processedAddress) {
+		processedAddress.locale = processedAddress.locale.replace("-", "_");
+	}
+	
+	return processedAddress;
 }
 
 export default {
@@ -226,5 +238,7 @@ export default {
 	getInstallationId,
 	trackSignUp,
 	trackLogin,
-	CONSENT_TYPES
+	trackTransaction,
+	CONSENT_TYPES,
+	TRANSACTION_ADDRESS_TYPES
 };

@@ -281,11 +281,76 @@ export default class App extends Component<Props> {
   }
 
   trackSignUp() {
-    InLocoEngage.trackSignUp("sample_signup_id");
+    InLocoEngage.trackSignUp("sample_signup_id", {
+      locale: "pt-BR",
+      countryName: "Brasil",
+      countryCode: "BR",
+      adminArea: "Pernambuco",
+      subAdminArea: "Recife",
+      locality: "Recife",
+      subLocality: "Pina",
+      thoroughfare: "Av. Engenheiro Antônio de Goes",
+      subThoroughfare: 300,
+      postalCode: "51110-100",
+      latitude: -8.088109,
+      longitude: -34.883838
+    });
   }
 
   trackLogin() {
-    InLocoEngage.trackLogin("sample_account_id");
+    InLocoEngage.trackLogin("sample_account_id", "sample_login_id");
+  }
+
+  trackTransaction() {
+    const billingAddress = {
+      locale: "pt-BR",
+      countryName: "Brasil",
+      countryCode: "BR",
+      adminArea: "Pernambuco",
+      subAdminArea: "Recife",
+      locality: "Recife",
+      subLocality: "Pina",
+      thoroughfare: "Av. Engenheiro Antônio de Goes",
+      subThoroughfare: 300,
+      postalCode: "51110-100",
+      latitude: -8.088109,
+      longitude: -34.883838,
+      type: InLocoEngage.TRANSACTION_ADDRESS_TYPES.BILLING
+    };
+
+    const homeAddress = {
+      locale: "pt-BR",
+      countryName: "Brasil",
+      countryCode: "BR",
+      adminArea: "Pernambuco",
+      subAdminArea: "Recife",
+      locality: "Recife",
+      subLocality: "Pina",
+      thoroughfare: "Av. Engenheiro Antônio de Goes",
+      subThoroughfare: 300,
+      postalCode: "51110-100",
+      latitude: -8.088109,
+      longitude: -34.883838,
+      type: InLocoEngage.TRANSACTION_ADDRESS_TYPES.HOME
+    }
+
+    const shippingAddress = {
+      locale: "pt-BR",
+      countryName: "Brasil",
+      countryCode: "BR",
+      adminArea: "Pernambuco",
+      subAdminArea: "Recife",
+      locality: "Recife",
+      subLocality: "Pina",
+      thoroughfare: "Av. Engenheiro Antônio de Goes",
+      subThoroughfare: 300,
+      postalCode: "51110-100",
+      latitude: -8.088109,
+      longitude: -34.883838,
+      type: InLocoEngage.TRANSACTION_ADDRESS_TYPES.SHIPPING
+    }
+
+    InLocoEngage.trackTransaction("sample_account_id", "sample_transaction_id", [homeAddress, billingAddress, shippingAddress]);
   }
 
   render() {
@@ -342,6 +407,9 @@ export default class App extends Component<Props> {
           </View>
           <View style={styles.buttonContainer}>
             <Button color="#80BA40" title="Track login" onPress={() => this.trackLogin()}></Button>
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button color="#80BA40" title="Track transaction" onPress={() => this.trackTransaction()}></Button>
           </View>
         </ScrollView>
       </SafeAreaView>
