@@ -5226,10 +5226,10 @@ react-native-firebase@5.5.6:
     opencollective-postinstall "^2.0.0"
     prop-types "^15.7.2"
 
-react-native-inlocoengage@^5.6.0:
-  version "5.6.0"
-  resolved "https://registry.yarnpkg.com/react-native-inlocoengage/-/react-native-inlocoengage-5.6.0.tgz#c29501a76b8563647692fa1c6be86d8f232ead1f"
-  integrity sha512-SfKnI5YuhAlmdyICGjDjWczkHjOP3Nw+fdolhsMZBD3DvRSom8RSzsxxCy0xMtCy4F0BYOt7t0eslco9byAgWA==
+react-native-inlocoengage@^5.8.0:
+  version "5.9.0"
+  resolved "https://registry.yarnpkg.com/react-native-inlocoengage/-/react-native-inlocoengage-5.9.0.tgz#baeef6c80d6673a8e29bef7eb65e0bb67554dc8d"
+  integrity sha512-TV4qSJJtS1hTMqrCBCCWACaBsSgv6l42wVXC+E/mMSu9xmK44PLIypHpubeyRVHYziKLqoN8Ca+egpV5N9rbxw==
 
 react-native-permissions@^2.0.3:
   version "2.0.3"
@@ -6158,9 +6158,9 @@ tmp@^0.0.33:
     os-tmpdir "~1.0.2"
 
 tmpl@1.0.x:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/tmpl/-/tmpl-1.0.4.tgz#23640dd7b42d00433911140820e5cf440e521dd1"
-  integrity sha1-I2QN17QtAEM5ERQIIOXPRA5SHdE=
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/tmpl/-/tmpl-1.0.5.tgz#8683e0b902bb9c20c4f726e3c0b69f36518c07cc"
+  integrity sha512-3f0uOEAQwIqGuWW2MVzYg8fV/QNnc/IpuJNG837rLuczAaLVHslWHZQj4IGiEl5Hs3kkbhwL9Ab7Hrsmuj+Smw==
 
 to-fast-properties@^2.0.0:
   version "2.0.0"
