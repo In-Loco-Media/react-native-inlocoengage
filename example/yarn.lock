@@ -5226,10 +5226,10 @@ react-native-firebase@5.5.6:
     opencollective-postinstall "^2.0.0"
     prop-types "^15.7.2"
 
-react-native-inlocoengage@^5.6.0:
-  version "5.6.0"
-  resolved "https://registry.yarnpkg.com/react-native-inlocoengage/-/react-native-inlocoengage-5.6.0.tgz#c29501a76b8563647692fa1c6be86d8f232ead1f"
-  integrity sha512-SfKnI5YuhAlmdyICGjDjWczkHjOP3Nw+fdolhsMZBD3DvRSom8RSzsxxCy0xMtCy4F0BYOt7t0eslco9byAgWA==
+react-native-inlocoengage@^5.8.0:
+  version "5.9.0"
+  resolved "https://registry.yarnpkg.com/react-native-inlocoengage/-/react-native-inlocoengage-5.9.0.tgz#baeef6c80d6673a8e29bef7eb65e0bb67554dc8d"
+  integrity sha512-TV4qSJJtS1hTMqrCBCCWACaBsSgv6l42wVXC+E/mMSu9xmK44PLIypHpubeyRVHYziKLqoN8Ca+egpV5N9rbxw==
 
 react-native-permissions@^2.0.3:
   version "2.0.3"
@@ -6267,9 +6267,9 @@ typedarray@^0.0.6:
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
 ua-parser-js@^0.7.18:
-  version "0.7.20"
-  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.20.tgz#7527178b82f6a62a0f243d1f94fd30e3e3c21098"
-  integrity sha512-8OaIKfzL5cpx8eCMAhhvTlft8GYF8b2eQr6JkCyVdrgjcytyOmPCXrqXFcUnhonRpLlh5yxEZVohm6mzaowUOw==
+  version "0.7.31"
+  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.31.tgz#649a656b191dffab4f21d5e053e27ca17cbff5c6"
+  integrity sha512-qLK/Xe9E2uzmYI3qLeOmI0tEOt+TBBQyUIAh4aAgU05FVYzeZrKUdkAZfBNVGRaHVgV0TDkdEngJSw/SyQchkQ==
 
 uglify-es@^3.1.9:
   version "3.3.9"
