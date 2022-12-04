@@ -2008,9 +2008,9 @@ decamelize@^1.1.1, decamelize@^1.2.0:
   integrity sha1-9lNNFRSCabIDUue+4m9QH5oZEpA=
 
 decode-uri-component@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.0.tgz#eb3913333458775cb84cd1a1fae062106bb87545"
-  integrity sha1-6zkTMzRYd1y4TNGh+uBiEGu4dUU=
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.2.tgz#e69dbe25d37941171dd540e024c444cd5188e1e9"
+  integrity sha512-FqUYQ+8o158GyGTrMFJms9qh3CqTKvAqgqsTnkLI8sKu0028orqBhxNMFkFen0zGyg6epACD32pjVk58ngIErQ==
 
 dedent-js@^1.0.1:
   version "1.0.1"
@@ -5226,10 +5226,10 @@ react-native-firebase@5.5.6:
     opencollective-postinstall "^2.0.0"
     prop-types "^15.7.2"
 
-react-native-inlocoengage@^5.6.0:
-  version "5.6.0"
-  resolved "https://registry.yarnpkg.com/react-native-inlocoengage/-/react-native-inlocoengage-5.6.0.tgz#c29501a76b8563647692fa1c6be86d8f232ead1f"
-  integrity sha512-SfKnI5YuhAlmdyICGjDjWczkHjOP3Nw+fdolhsMZBD3DvRSom8RSzsxxCy0xMtCy4F0BYOt7t0eslco9byAgWA==
+react-native-inlocoengage@^5.8.0:
+  version "5.9.0"
+  resolved "https://registry.yarnpkg.com/react-native-inlocoengage/-/react-native-inlocoengage-5.9.0.tgz#baeef6c80d6673a8e29bef7eb65e0bb67554dc8d"
+  integrity sha512-TV4qSJJtS1hTMqrCBCCWACaBsSgv6l42wVXC+E/mMSu9xmK44PLIypHpubeyRVHYziKLqoN8Ca+egpV5N9rbxw==
 
 react-native-permissions@^2.0.3:
   version "2.0.3"
